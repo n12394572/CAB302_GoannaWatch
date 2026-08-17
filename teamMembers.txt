@@ -2,3 +2,4 @@ ADD YOUR NAME TO THIS FILE AND THEN COMMIT THE CHANGES TO THE REPO TO PROVE YOU 
 Team members:
 Kayden La Motte
 Wyatt Moore
+Wang Haomin
