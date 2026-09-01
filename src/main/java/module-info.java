@@ -10,4 +10,8 @@ module com.example.addressbook {
     opens com.example.addressbook.controller to javafx.fxml;
     exports com.example.addressbook.model;
     opens com.example.addressbook.model to javafx.fxml;
+    exports login_page;
+    opens login_page to javafx.fxml;
+    exports login_page.controller;
+    opens login_page.controller to javafx.fxml;
 }
