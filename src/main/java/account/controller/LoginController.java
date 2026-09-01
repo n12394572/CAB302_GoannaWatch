@@ -1,14 +1,17 @@
-package login_page.controller;
+package account.controller;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
-import javafx.scene.control.TextArea;
+import javafx.scene.control.TextField;
 
 public class LoginController {
 
     @FXML
-    private TextArea termsAndConditions;
+    private TextField emailAddress;
+
+    @FXML
+    private TextField passwordLogin;
 
     @FXML
     private CheckBox rememberMe;
@@ -16,9 +19,10 @@ public class LoginController {
     @FXML
     private Button nextButton;
 
+
     @FXML
-    private void onAgreeCheckBoxClick() {
-        nextButton.setDisable(!rememberMe.isSelected());
+    private void rememberMeClick() {
+        ;
     }
 
     @FXML

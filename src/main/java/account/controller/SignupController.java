@@ -1,9 +1,9 @@
-package login_page;
+package account.controller;
 
 import javafx.application.Application;
 import javafx.stage.Stage;
 
-public class SignupApplication extends Application {
+public class SignupController extends Application {
 
     public static void main(String[] args) {
         launch(args);
