@@ -1,15 +1,21 @@
 package account.controller;
 
+import account.App;
 import account.model.IAccountDAO;
 import account.model.MockAccountDAO;
 import account.model.Account;
 
+import account.model.Session;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 
+import java.io.IOException;
 import java.util.InputMismatchException;
 
 public class SignupController {
@@ -20,7 +26,7 @@ public class SignupController {
     private TextField emailTextField;
 
     @FXML
-    private TextField passwordTextField;
+    private PasswordField passwordField;
 
     @FXML
     private TextField firstNameTextField;
@@ -31,30 +37,54 @@ public class SignupController {
     @FXML
     private Button submitButton;
 
+    @FXML
+    private Button cancelButton;
+
     public SignupController(){
         accountDAO = new MockAccountDAO();
     }
 
     @FXML
-    private void onCancelButtonClick() {
-        System.out.println("Cancel clicked");
-        closeWindow();
+    private void onCancelButtonClick() throws IOException {
+        Stage stage = (Stage) cancelButton.getScene().getWindow();
+        FXMLLoader fxmlLoader = new FXMLLoader(App.class.getResource("welcome.fxml"));
+        Scene scene = new Scene(fxmlLoader.load());
+        stage.setScene(scene);
     }
 
     @FXML
-    private void onSubmitButtonClick() {
+    private void onSubmitButtonClick() throws IOException {
         String firstName = firstNameTextField.getText();
         String lastName = lastNameTextField.getText();
         String email = emailTextField.getText();
-        String password = passwordTextField.getText();
+        String password = passwordField.getText();
 
+        if (isEmailAlreadyRegistered(email)){
+            showAlert("An account with that email already exists.");
+            return;
+        }
         try {
             Account newAccount = new Account(firstName, lastName, email, password);
             accountDAO.addAccount(newAccount);
             System.out.println("Account created for " + newAccount.getFullName());
-        } catch (InputMismatchException e) {
-            showAlert("Please fill in first and last name.");
+
+            Session.setCurrentAccount(newAccount);
+
+            Stage stage = (Stage) submitButton.getScene().getWindow();
+            FXMLLoader fxmlLoader = new FXMLLoader(App.class.getResource("landing.fxml"));
+            Scene scene = new Scene(fxmlLoader.load());
+            stage.setScene(scene);
+
+        } catch (InputMismatchException | IllegalArgumentException e) {
+            showAlert(e.getMessage());
         }
+
+
+    }
+
+    private boolean isEmailAlreadyRegistered(String email) {
+        return accountDAO.getAllAccounts().stream()
+                .anyMatch(account -> account.getEmail().equalsIgnoreCase(email));
     }
 
     private void showAlert(String message) {
@@ -63,9 +93,5 @@ public class SignupController {
         alert.setContentText(message);
         alert.showAndWait();
     }
-
-    private void closeWindow() {
-        Stage stage = (Stage) submitButton.getScene().getWindow();
-        stage.close();
-    }
 }
+

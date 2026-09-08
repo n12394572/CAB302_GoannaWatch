@@ -1,8 +1,15 @@
 package account.model;
 
+import org.apache.commons.validator.routines.EmailValidator;
 import java.util.InputMismatchException;
+import java.util.regex.Pattern;
 
 public class Account {
+    // At least 8 chars, 1 digit, special, lower, and uppercase char, with no whitespace
+    private static final Pattern PASSWORD_PATTERN =
+            Pattern.compile("^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&+=!])(?=\\S+$).{8,}$");
+
+
     private int id;
     private String firstName;
     private String lastName;
@@ -11,10 +18,14 @@ public class Account {
 
 
     public Account(String firstName, String lastName, String email, String password) {
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.email = email;
-        this.password = password;
+        setEmail(email);
+        setFirstName(firstName);
+        setLastName(lastName);
+        if (password != null && !password.isBlank()){
+            setPassword(password);
+        } else {
+            this.password = password;
+        }
     }
 
     public int getId() {
@@ -31,7 +42,7 @@ public class Account {
 
     public void setFirstName(String firstName) {
         if (firstName.isBlank() || firstName==null){
-            throw new InputMismatchException();
+            throw new InputMismatchException("First name cannot be blank.");
         }
         this.firstName = capitaliseName(firstName);
     }
@@ -45,6 +56,9 @@ public class Account {
     }
 
     public void setLastName(String lastName) {
+        if (lastName.isBlank() || lastName==null){
+            throw new InputMismatchException("Last name cannot be blank.");
+        }
         this.lastName = capitaliseName(lastName);
     }
 
@@ -53,6 +67,10 @@ public class Account {
     }
 
     public void setEmail(String email) {
+        EmailValidator emailValidator = EmailValidator.getInstance();
+        if (email==null || !emailValidator.isValid(email)){
+            throw new InputMismatchException("Email must be a valid email address.");
+        }
         this.email = email;
     }
 
@@ -61,8 +79,10 @@ public class Account {
     }
 
     public void setPassword(String password) {
-        if (password.isBlank() || password == null){
-            throw new InputMismatchException();
+        if (password.isBlank() || !PASSWORD_PATTERN.matcher(password).matches()){
+            throw new IllegalArgumentException(
+                    "Password must be at least 8 characters and include an uppercase letter, a number, and a special character."
+            );
         }
         this.password = password;
     }

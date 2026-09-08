@@ -9,9 +9,10 @@
 <?import javafx.scene.layout.HBox?>
 
 <?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.PasswordField?>
 <VBox spacing="20.0" xmlns:fx="http://javafx.com/fxml"
       fx:controller="account.controller.LoginController"
-        stylesheets="@account.css">
+      stylesheets="@account.css">
     <padding>
         <Insets bottom="20.0" left="20.0" right="20.0" top="20.0"/>
     </padding>
@@ -23,15 +24,16 @@
                promptText="Enter your email address..." prefHeight="50" prefWidth="100"
     />
     <Label id="userInputLabel" text="Password"/>
-    <TextField id="userInput" fx:id="passwordTextField"
-               promptText="Enter your password..." prefHeight="50" prefWidth="100"
+    <PasswordField id="userInput" fx:id="passwordField"
+                   promptText="Enter your password..." prefHeight="50" prefWidth="100"
     />
     <CheckBox fx:id="rememberMeCheck"
               text="Remember Me"
               onAction="#onRememberMeCheck"
     />
     <VBox alignment="CENTER">
-        <Button text="LOG IN" id="submitForm" prefHeight="50" prefWidth="300"/> <!-- add link to log-in check mechanism later -->
+        <Button text="LOG IN" fx:id="loginButton" prefHeight="50" prefWidth="300" onAction="#onNextButtonClick"/>
+        <Button text="Go Back" fx:id="cancelButton" prefHeight="50" prefWidth="300" onAction="#onCancelButtonClick"/>
         <HBox alignment="BOTTOM_CENTER">
             <Label text="Don't have an account?               "/>
             <Label text="insert SIGN UP page link here"/>

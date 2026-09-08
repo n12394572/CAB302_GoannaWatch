@@ -12,9 +12,9 @@ public class MockAccountDAO implements IAccountDAO{
 
     public MockAccountDAO() {
         // Add some initial accounts to the mock database
-        addAccount(new Account("John", "Doe", "johndoe@example.com", "0423423423"));
-        addAccount(new Account("Jane", "Doe", "janedoe@example.com", "0423423424"));
-        addAccount(new Account("Jay", "Doe", "jaydoe@example.com", "0423423425"));
+        addAccount(new Account("John", "Doe", "johndoe@example.com", "Password1!"));
+        addAccount(new Account("Jane", "Doe", "janedoe@example.com", "Password1!"));
+        addAccount(new Account("Jay", "Doe", "jaydoe@example.com", "Password1!"));
     }
 
     @Override

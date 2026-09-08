@@ -1,16 +1,18 @@
 package account.controller;
 
+import account.App;
 import account.model.IAccountDAO;
 import account.model.Account;
 import account.model.MockAccountDAO;
 
+import account.model.Session;
 import javafx.fxml.FXML;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Button;
-import javafx.scene.control.CheckBox;
-import javafx.scene.control.TextField;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Scene;
+import javafx.scene.control.*;
 import javafx.stage.Stage;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
 
@@ -22,19 +24,15 @@ public class LoginController {
     private TextField emailTextField;
 
     @FXML
-    private TextField passwordTextField;
-
-    @FXML
-    private TextField firstNameTextField;
-
-    @FXML
-    private TextField lastNameTextField;
+    private PasswordField passwordField;
 
     @FXML
     private CheckBox rememberMeCheck;
 
     @FXML
-    private Button nextButton;
+    private Button loginButton;
+    @FXML
+    private Button cancelButton;
 
     public LoginController() {
         accountDAO = new MockAccountDAO();
@@ -46,15 +44,17 @@ public class LoginController {
     }
 
     @FXML
-    private void onCancelButtonClick() {
-        System.out.println("Cancel clicked");
-        closeWindow(nextButton);
+    private void onCancelButtonClick() throws IOException {
+        Stage stage = (Stage) cancelButton.getScene().getWindow();
+        FXMLLoader fxmlLoader = new FXMLLoader(App.class.getResource("welcome.fxml"));
+        Scene scene = new Scene(fxmlLoader.load());
+        stage.setScene(scene);
     }
 
     @FXML
-    private void onNextButtonClick() {
+    private void onNextButtonClick() throws IOException {
         String email = emailTextField.getText() == null ? "" : emailTextField.getText().trim();
-        String password = passwordTextField.getText() == null ? "" : passwordTextField.getText().trim();
+        String password = passwordField.getText() == null ? "" : passwordField.getText().trim();
 
         if (email.isBlank() || password.isBlank()) {
             showAlert(Alert.AlertType.WARNING, "Missing information", "Please enter both email or password.");
@@ -67,8 +67,12 @@ public class LoginController {
             return;
         }
 
-        Account account = matchedAccount.get();
-        System.out.println("Logging in as " + account.getFullName() + (rememberMe ? "(remember me enabled)" : ""));
+        Session.setCurrentAccount(matchedAccount.get());
+
+        Stage stage = (Stage) loginButton.getScene().getWindow();
+        FXMLLoader fxmlLoader = new FXMLLoader(App.class.getResource("landing.fxml"));
+        Scene scene = new Scene(fxmlLoader.load());
+        stage.setScene(scene);
     }
 
     private Optional<Account> findAccountByEmail(String email) {
@@ -84,11 +88,6 @@ public class LoginController {
         alert.setHeaderText(null);
         alert.setContentText(message);
         alert.showAndWait();
-    }
-
-    private void closeWindow(Button anyButtonOnScene) {
-        Stage stage = (Stage) anyButtonOnScene.getScene().getWindow();
-        stage.close();
     }
 }
 
