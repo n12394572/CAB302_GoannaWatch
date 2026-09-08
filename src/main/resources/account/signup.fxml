@@ -18,12 +18,20 @@
     <Label text="Welcome to Goanna Watch!" id="pageTitle" wrapText="true"/>
     <Label text="Sign in to begin recording local wildlife." id="secondaryText" wrapText="true"/>
 
+    <Label id="userInputLabel" text="First Name"/>
+    <TextField id="userInput" fx:id="firstNameTextField"
+               promptText="Enter your First Name..." prefHeight="50" prefWidth="100"
+    />
+    <Label id="userInputLabel" text="Last Name"/>
+    <TextField id="userInput" fx:id="lastNameTextField"
+               promptText="Enter your Last Name..." prefHeight="50" prefWidth="100"
+    />
     <Label id="userInputLabel" text="Email Address"/>
-    <TextField id="userInput" fx:id="emailAddress"
+    <TextField id="userInput" fx:id="emailTextField"
                promptText="Enter your email address..." prefHeight="50" prefWidth="100"
     />
     <Label id="userInputLabel" text="Password"/>
-    <TextField id="userInput" fx:id="passwordSignUp"
+    <TextField id="userInput" fx:id="passwordTextField"
                promptText="Enter your password..." prefHeight="50" prefWidth="100"
     />
     <VBox alignment="CENTER">

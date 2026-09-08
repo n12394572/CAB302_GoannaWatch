@@ -1,28 +1,36 @@
 package account.controller;
 
+import account.model.IAccountDAO;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.TextField;
 
 public class LoginController {
+    // private final IAccountDAO accountDAO;
+    private boolean rememberMe = false;
 
     @FXML
-    private TextField emailAddress;
+    private TextField emailTextField;
 
     @FXML
-    private TextField passwordLogin;
+    private TextField passwordTextField;
 
     @FXML
-    private CheckBox rememberMe;
+    private TextField firstNameTextField;
+
+    @FXML
+    private TextField lastNameTextField;
+
+    @FXML
+    private CheckBox rememberMeCheck;
 
     @FXML
     private Button nextButton;
 
-
     @FXML
-    private void rememberMeClick() {
-        ;
+    protected void onRememberMeCheck() {
+        rememberMe = rememberMeCheck.isSelected();
     }
 
     @FXML
