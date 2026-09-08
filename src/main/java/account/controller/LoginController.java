@@ -48,6 +48,7 @@ public class LoginController {
     @FXML
     private void onCancelButtonClick() {
         System.out.println("Cancel clicked");
+        closeWindow(nextButton);
     }
 
     @FXML
