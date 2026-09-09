@@ -1,3 +1,8 @@
+/**
+ * Provides account management functionality, including account creation,
+ * login, and session tracking, along with the JavaFX UI controllers
+ * that drive the application's screens.
+ */
 module account {
     requires javafx.controls;
     requires javafx.fxml;
@@ -11,4 +16,10 @@ module account {
     opens account.controller to javafx.fxml;
     exports account.model;
     opens account.model to javafx.fxml;
+    exports observations;
+    opens observations to javafx.fxml;
+    exports observations.model;
+    opens observations.model to javafx.fxml;
+    exports observations.controller;
+    opens observations.controller to javafx.fxml;
 }

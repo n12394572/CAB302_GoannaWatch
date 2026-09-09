@@ -4,7 +4,12 @@ import org.apache.commons.validator.routines.EmailValidator;
 import java.util.InputMismatchException;
 import java.util.regex.Pattern;
 
+
+/**
+ * A model class representing an account with a first name, last name, email, and password.
+ */
 public class Account {
+
     // At least 8 chars, 1 digit, special, lower, and uppercase char, with no whitespace
     private static final Pattern PASSWORD_PATTERN =
             Pattern.compile("^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&+=!])(?=\\S+$).{8,}$");
@@ -16,7 +21,13 @@ public class Account {
     private String email;
     private String password;
 
-
+    /**
+     * Constructs a new Account with the specified first name, last name, email, and password
+     * @param firstName The first name of the contact.
+     * @param lastName The last name of the contact.
+     * @param email The email of the contact.
+     * @param password The password of the contact.
+     */
     public Account(String firstName, String lastName, String email, String password) {
         setEmail(email);
         setFirstName(firstName);
@@ -28,18 +39,34 @@ public class Account {
         }
     }
 
+    /**
+     * Returns the ID of the account.
+     * @return The ID of the account.
+     */
     public int getId() {
         return id;
     }
 
+    /**
+     * Sets the ID of the account.
+     * @param id The ID to set.
+     */
     public void setId(int id) {
         this.id = id;
     }
 
+    /**
+     * Returns the first name of the account.
+     * @return The first name of the account.
+     */
     public String getFirstName() {
         return firstName;
     }
 
+    /**
+     * Sets the first name of the account.
+     * @param firstName The first name to set.
+     */
     public void setFirstName(String firstName) {
         if (firstName.isBlank() || firstName==null){
             throw new InputMismatchException("First name cannot be blank.");
@@ -47,14 +74,27 @@ public class Account {
         this.firstName = capitaliseName(firstName);
     }
 
+    /**
+     * Returns a capitalised version of the provided name.
+     * @param entry The name to be capitalised.
+     * @return The capitalised version of the name.
+     */
     private String capitaliseName(String entry) {
         return entry.substring(0,1).toUpperCase() + entry.substring(1);
     }
 
+    /**
+     * Returns the last name of the account.
+     * @return The last name of the account.
+     */
     public String getLastName() {
         return lastName;
     }
 
+    /**
+     * Sets the last name of the account.
+     * @param lastName The last name to set.
+     */
     public void setLastName(String lastName) {
         if (lastName.isBlank() || lastName==null){
             throw new InputMismatchException("Last name cannot be blank.");
@@ -62,10 +102,18 @@ public class Account {
         this.lastName = capitaliseName(lastName);
     }
 
+    /**
+     * Returns the email of the account.
+     * @return The email of the account.
+     */
     public String getEmail() {
         return email;
     }
 
+    /**
+     * Sets the email of the account.
+     * @param email The email to be set.
+     */
     public void setEmail(String email) {
         EmailValidator emailValidator = EmailValidator.getInstance();
         if (email==null || !emailValidator.isValid(email)){
@@ -74,10 +122,18 @@ public class Account {
         this.email = email;
     }
 
+    /**
+     * Returns the password of the account.
+     * @return The password of the account.
+     */
     public String getPassword() {
         return password;
     }
 
+    /**
+     * Sets the password of the account.
+     * @param password The password of the account. Must include at least 8 characters, an uppercase and lowercase character, a number, and a special character.
+     */
     public void setPassword(String password) {
         if (password.isBlank() || !PASSWORD_PATTERN.matcher(password).matches()){
             throw new IllegalArgumentException(

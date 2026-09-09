@@ -16,5 +16,7 @@
     <Label fx:id="welcomeLabel" text="Welcome!" style="-fx-font-size: 26px; -fx-font-weight: bold;" />
     <Label fx:id="emailLabel" text="" />
 
+    <Button fx:id="observationButton" text="Record an Observation" prefWidth="160.0" onAction="#onObservationButtonClick" />
     <Button fx:id="logoutButton" text="Log Out" prefWidth="160.0" onAction="#onLogoutButtonClick" />
+
 </VBox>

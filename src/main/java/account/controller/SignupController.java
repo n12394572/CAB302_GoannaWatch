@@ -18,6 +18,9 @@ import javafx.stage.Stage;
 import java.io.IOException;
 import java.util.InputMismatchException;
 
+/**
+ * The controller class for the Signup view of the App application. This class handles the user interactions in the Signup view.
+ */
 public class SignupController {
 
     private final IAccountDAO accountDAO;
@@ -40,10 +43,17 @@ public class SignupController {
     @FXML
     private Button cancelButton;
 
+    /**
+     * Constructs a new SignupController with an AccountManager that  uses an in-memory database to perform CRUD operations on accounts.
+     */
     public SignupController(){
         accountDAO = new MockAccountDAO();
     }
 
+    /**
+     * Handles the action of clicking the cancel button. Loads the welcome view of the application.
+     * @throws IOException If the .fxml file for the welcome view isn't found.
+     */
     @FXML
     private void onCancelButtonClick() throws IOException {
         Stage stage = (Stage) cancelButton.getScene().getWindow();
@@ -52,6 +62,10 @@ public class SignupController {
         stage.setScene(scene);
     }
 
+    /**
+     * Handles the action of clicking the signup button. Checks an account doesn't exist with a matching email and loads the landing view of the application.
+     * @throws IOException If the .fxml file for the landing view isn't found.
+     */
     @FXML
     private void onSubmitButtonClick() throws IOException {
         String firstName = firstNameTextField.getText();
@@ -82,11 +96,20 @@ public class SignupController {
 
     }
 
+    /**
+     * Checks if an email is already registered with an account in the database.
+     * @param email The email to check if it is already registered.
+     * @return The account linked to the email if it already exists, else false.
+     */
     private boolean isEmailAlreadyRegistered(String email) {
         return accountDAO.getAllAccounts().stream()
                 .anyMatch(account -> account.getEmail().equalsIgnoreCase(email));
     }
 
+    /**
+     * Displays an alert dialog box to the user.
+     * @param message The text shown in the body of the alert.
+     */
     private void showAlert(String message) {
         Alert alert = new Alert(Alert.AlertType.WARNING);
         alert.setHeaderText(null);
