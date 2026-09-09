@@ -1,4 +1,4 @@
-package account.model;
+package GoannaWatch.account.model;
 
 /**
  * Holds reference to the {@link Account} currently logged in.

@@ -1,6 +1,6 @@
-package observations.model;
+package GoannaWatch.observations.model;
 
-import account.model.Account;
+import GoannaWatch.account.model.Account;
 
 import java.util.ArrayList;
 import java.util.List;

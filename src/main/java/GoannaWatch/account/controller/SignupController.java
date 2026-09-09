@@ -1,11 +1,11 @@
-package account.controller;
+package GoannaWatch.account.controller;
 
-import account.App;
-import account.model.IAccountDAO;
-import account.model.MockAccountDAO;
-import account.model.Account;
+import GoannaWatch.App;
+import GoannaWatch.account.model.IAccountDAO;
+import GoannaWatch.account.model.MockAccountDAO;
+import GoannaWatch.account.model.Account;
 
-import account.model.Session;
+import GoannaWatch.account.model.Session;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
@@ -19,7 +19,7 @@ import java.io.IOException;
 import java.util.InputMismatchException;
 
 /**
- * The controller class for the Signup view of the App application. This class handles the user interactions in the Signup view.
+ * The controller class for the Signup view of the account.App application. This class handles the user interactions in the Signup view.
  */
 public class SignupController {
 
@@ -63,7 +63,7 @@ public class SignupController {
     }
 
     /**
-     * Handles the action of clicking the signup button. Checks an account doesn't exist with a matching email and loads the landing view of the application.
+     * Handles the action of clicking the signup button. Checks that an account doesn't exist with a matching email and loads the landing view of the application.
      * @throws IOException If the .fxml file for the landing view isn't found.
      */
     @FXML

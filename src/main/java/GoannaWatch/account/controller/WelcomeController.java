@@ -1,6 +1,6 @@
-package account.controller;
+package GoannaWatch.account.controller;
 
-import account.App;
+import GoannaWatch.App;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
@@ -10,7 +10,7 @@ import javafx.stage.Stage;
 import java.io.IOException;
 
 /**
- * The controller class for the Welcome view of the App application. This class handles the user interactions in the Welcome view.
+ * The controller class for the Welcome view of the account.App application. This class handles the user interactions in the Welcome view.
  */
 public class WelcomeController {
 

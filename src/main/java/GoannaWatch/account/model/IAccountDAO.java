@@ -1,4 +1,4 @@
-package account.model;
+package GoannaWatch.account.model;
 
 import java.util.List;
 

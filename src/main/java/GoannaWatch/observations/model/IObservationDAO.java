@@ -1,6 +1,6 @@
-package observations.model;
+package GoannaWatch.observations.model;
 
-import account.model.Account;
+import GoannaWatch.account.model.Account;
 
 import java.util.List;
 
@@ -41,16 +41,16 @@ public interface IObservationDAO {
     public Observation getObservation(int id);
 
     /**
-     * Retrieves all observations from the database.
+     * Retrieves all GoanaWatch.observations from the database.
      *
-     * @return A list of all observations in the database.
+     * @return A list of all GoanaWatch.observations in the database.
      */
     public List<Observation> getAllObservations();
 
     /**
-     * Retrieves all observations from the database authored by the account.
-     * @param account The author of the observations in the database.
-     * @return A list of all observations in the database authored by the account.
+     * Retrieves all GoanaWatch.observations from the database authored by the account.
+     * @param account The author of the GoanaWatch.observations in the database.
+     * @return A list of all GoanaWatch.observations in the database authored by the account.
      */
     public List<Observation> getObservationsByAccount(Account account);
 }

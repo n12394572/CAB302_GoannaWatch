@@ -1,11 +1,11 @@
-package account.controller;
+package GoannaWatch.account.controller;
 
-import account.App;
-import account.model.IAccountDAO;
-import account.model.Account;
-import account.model.MockAccountDAO;
+import GoannaWatch.App;
+import GoannaWatch.account.model.IAccountDAO;
+import GoannaWatch.account.model.Account;
+import GoannaWatch.account.model.MockAccountDAO;
 
-import account.model.Session;
+import GoannaWatch.account.model.Session;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;

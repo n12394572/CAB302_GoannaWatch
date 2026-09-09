@@ -1,6 +1,6 @@
-package observations.model;
+package GoannaWatch.observations.model;
 
-import account.model.Account;
+import GoannaWatch.account.model.Account;
 
 import java.time.LocalDate;
 import java.util.InputMismatchException;

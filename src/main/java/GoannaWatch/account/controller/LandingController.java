@@ -1,8 +1,8 @@
-package account.controller;
+package GoannaWatch.account.controller;
 
-import account.App;
-import account.model.Account;
-import account.model.Session;
+import GoannaWatch.App;
+import GoannaWatch.account.model.Account;
+import GoannaWatch.account.model.Session;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
@@ -13,7 +13,7 @@ import javafx.stage.Stage;
 import java.io.IOException;
 
 /**
- * The controller class for the Landing view of the App application. This class handles the user interactions in the Landing Page view.
+ * The controller class for the Landing view of the account.App application. This class handles the user interactions in the Landing Page view.
  */
 public class LandingController {
 

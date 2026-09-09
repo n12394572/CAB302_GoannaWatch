@@ -1,4 +1,4 @@
-package account;
+package GoannaWatch;
 
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
@@ -7,7 +7,7 @@ import javafx.stage.Stage;
 import java.io.IOException;
 
 /**
- * The main application class for the App application. This class extends the JavaFX Application class and starts the JavaFx lifecycle.
+ * The main application class for the account.App application. This class extends the JavaFX Application class and starts the JavaFx lifecycle.
  */
 public class App extends Application {
     @Override

@@ -1,4 +1,4 @@
-package account.model;
+package GoannaWatch.account.model;
 
 import org.apache.commons.validator.routines.EmailValidator;
 import java.util.InputMismatchException;
