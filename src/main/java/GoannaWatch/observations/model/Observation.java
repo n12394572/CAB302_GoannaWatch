@@ -6,6 +6,7 @@ import java.time.LocalDate;
 import java.util.InputMismatchException;
 
 public class Observation {
+    //TODO Documentation
 
     private int id;
     private Account observer;

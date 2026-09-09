@@ -23,6 +23,11 @@ import java.util.InputMismatchException;
  */
 public class SignupController {
 
+    //TODO Add password confirmation and some sort of security for password
+    //TODO Bind button to enter key
+    //TODO Link Login page
+    //TODO Functionality for Remember Me checkbox
+
     private final IAccountDAO accountDAO;
 
     @FXML
@@ -58,7 +63,7 @@ public class SignupController {
     private void onCancelButtonClick() throws IOException {
         Stage stage = (Stage) cancelButton.getScene().getWindow();
         FXMLLoader fxmlLoader = new FXMLLoader(App.class.getResource("welcome.fxml"));
-        Scene scene = new Scene(fxmlLoader.load());
+        Scene scene = new Scene(fxmlLoader.load(),App.WIDTH, App.HEIGHT);
         stage.setScene(scene);
     }
 
@@ -86,7 +91,7 @@ public class SignupController {
 
             Stage stage = (Stage) submitButton.getScene().getWindow();
             FXMLLoader fxmlLoader = new FXMLLoader(App.class.getResource("landing.fxml"));
-            Scene scene = new Scene(fxmlLoader.load());
+            Scene scene = new Scene(fxmlLoader.load(), App.WIDTH, App.HEIGHT);
             stage.setScene(scene);
 
         } catch (InputMismatchException | IllegalArgumentException e) {

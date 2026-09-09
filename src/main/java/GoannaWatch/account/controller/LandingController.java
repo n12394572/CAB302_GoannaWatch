@@ -50,7 +50,7 @@ public class LandingController {
         Session.clear();
         Stage stage = (Stage) logoutButton.getScene().getWindow();
         FXMLLoader fxmlLoader = new FXMLLoader(App.class.getResource("welcome.fxml"));
-        Scene scene = new Scene(fxmlLoader.load());
+        Scene scene = new Scene(fxmlLoader.load(),800,600);
         stage.setScene(scene);
     }
 
@@ -62,7 +62,7 @@ public class LandingController {
     protected void onObservationButtonClick() throws IOException {
         Stage stage = (Stage) observationButton.getScene().getWindow();
         FXMLLoader fxmlLoader = new FXMLLoader(App.class.getResource("observation.fxml"));
-        Scene scene = new Scene(fxmlLoader.load());
+        Scene scene = new Scene(fxmlLoader.load(),App.WIDTH, App.HEIGHT);
         stage.setScene(scene);
     }
 }

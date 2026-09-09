@@ -8,6 +8,7 @@ module GoannaWatch {
     requires javafx.fxml;
     requires java.sql;
     requires org.apache.commons.validator;
+    requires atlantafx.base;
 
 
     opens GoannaWatch to javafx.fxml;

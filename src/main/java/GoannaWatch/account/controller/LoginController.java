@@ -20,6 +20,9 @@ import java.util.Optional;
  * Initialises the controller class. This method is automatically called after the .fxml file has been loaded.
  */
 public class LoginController {
+    //TODO Bind button to enter key
+    //TODO Link Signup Page
+
     private final IAccountDAO accountDAO;
     private boolean rememberMe = false;
 
@@ -60,13 +63,14 @@ public class LoginController {
     private void onCancelButtonClick() throws IOException {
         Stage stage = (Stage) cancelButton.getScene().getWindow();
         FXMLLoader fxmlLoader = new FXMLLoader(App.class.getResource("welcome.fxml"));
-        Scene scene = new Scene(fxmlLoader.load());
+        Scene scene = new Scene(fxmlLoader.load(), App.WIDTH, App.HEIGHT);
         stage.setScene(scene);
     }
 
     /**
      * Handles the action of clicking the login button. Checks if login details match an existing account and loads the landing view of the application.
      * @throws IOException If the .fxml file for the landing view isn't found.
+     * //TODO clear password field if login fails
      */
     @FXML
     private void onNextButtonClick() throws IOException {
@@ -88,7 +92,7 @@ public class LoginController {
 
         Stage stage = (Stage) loginButton.getScene().getWindow();
         FXMLLoader fxmlLoader = new FXMLLoader(App.class.getResource("landing.fxml"));
-        Scene scene = new Scene(fxmlLoader.load());
+        Scene scene = new Scene(fxmlLoader.load(), App.WIDTH, App.HEIGHT);
         stage.setScene(scene);
     }
 
@@ -109,6 +113,8 @@ public class LoginController {
      * @param type The category of alert to display.
      * @param title The text shown in the alert window's title bar.
      * @param message The text shown in the body of the alert.
+     *
+     * //TODO Change from Alert to a listener.
      */
     private void showAlert(Alert.AlertType type, String title, String message) {
         Alert alert = new Alert(type);

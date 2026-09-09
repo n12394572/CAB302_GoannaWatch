@@ -264,7 +264,7 @@ public class ObservationController {
     private void onBackButtonClick() throws IOException {
         Stage stage = (Stage) observationsTableView.getScene().getWindow();
         FXMLLoader fxmlLoader = new FXMLLoader(App.class.getResource("landing.fxml"));
-        Scene scene = new Scene(fxmlLoader.load());
+        Scene scene = new Scene(fxmlLoader.load(), App.WIDTH, App.HEIGHT);
         stage.setScene(scene);
     }
 
