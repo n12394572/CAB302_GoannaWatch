@@ -8,26 +8,49 @@
 <?import javafx.scene.control.TextField?>
 
 <?import javafx.scene.layout.GridPane?>
-<VBox spacing="20.0" xmlns:fx="http://javafx.com/fxml"
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.control.CheckBox?>
+<?import javafx.scene.control.ListView?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.control.ComboBox?>
+<VBox alignment="TOP_LEFT" spacing="20.0" xmlns:fx="http://javafx.com/fxml"
       fx:controller="GoannaWatch.observations.controller.ObservationController"
       stylesheets="@observation.css">
     <padding>
         <Insets bottom="20.0" left="20.0" right="20.0" top="20.0"/>
     </padding>
     <Label text="Record an Observation" id="pageTitle" wrapText="true"/>
+    <Label text="Select observation or create a new one" wrapText="true"/>
+    <HBox VBox.vgrow="ALWAYS" spacing="20.0">
+        <VBox spacing="10.0">
+            <CheckBox fx:id="showMineOnlyCheck" text = "Show only my observations" onAction="#onShowMineOnlyCheck"/>
 
-    <GridPane hgap="5.0" vgap="5.0" >
-        <Label text="Location:" GridPane.columnIndex="0" GridPane.rowIndex="0" />
-        <Label text="Animal Seen:" GridPane.columnIndex="0" GridPane.rowIndex="1" />
-        <Label text="Date:" GridPane.columnIndex="0" GridPane.rowIndex="2" />
-        <TextField fx:id="locationTextField" GridPane.columnIndex="1" GridPane.rowIndex="0" maxWidth="Infinity"/>
-        <TextField fx:id="animalTextField" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-        <DatePicker fx:id="datePicker" GridPane.columnIndex="1" GridPane.rowIndex="2" />
-    </GridPane>
-
-    <VBox alignment="CENTER">
-        <Button text="Submit" fx:id="submitButton" prefHeight="50" prefWidth="300" onAction="#onSubmitButtonClick"/>
-        <Button text="Cancel" fx:id="cancelButton" prefHeight="50" prefWidth="300" onAction="#onCancelButtonClick"/>
-    </VBox>
+            <ListView fx:id="observationsListView" />
+            <HBox spacing="10.0">
+                <Button text="New" onAction="#onAdd" maxWidth="Infinity"/>
+            </HBox>
+        </VBox>
+        <VBox spacing="10.0" prefWidth="400" fx:id="observationContainer">
+            <Label text="Observation details" />
+            <GridPane hgap="5.0" vgap="5.0">
+                <columnConstraints>
+                    <ColumnConstraints minWidth="70"/>
+                    <ColumnConstraints hgrow="ALWAYS"/>
+                </columnConstraints>
+                <Label text="Location: " GridPane.columnIndex="0" GridPane.rowIndex="0"/>
+                <Label text="Animal: " GridPane.columnIndex="0" GridPane.rowIndex="1"/>
+                <Label text="Date: " GridPane.columnIndex="0" GridPane.rowIndex="2"/>
+                <TextField fx:id="locationTextField" GridPane.columnIndex="1" GridPane.rowIndex="0"/>
+                <TextField fx:id="animalTextField" GridPane.columnIndex="1" GridPane.rowIndex="1"/>
+                <DatePicker fx:id="datePicker" GridPane.columnIndex="1" GridPane.rowIndex="2"/>
+            </GridPane>
+            <HBox spacing="10.0" alignment="CENTER">
+                <Button text="Confirm" onAction="#onEditConfirm"/>
+                <Button text="Cancel" onAction="#onCancel"/>
+                <Button text="Delete" onAction="#onDelete"/>
+            </HBox>
+        </VBox>
+    </HBox>
+    <Button text="Back" onAction="#onBackButtonClick" maxWidth="Infinity"/>
 </VBox>
 
