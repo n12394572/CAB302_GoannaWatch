@@ -2,11 +2,15 @@ package GoannaWatch.observations.controller;
 
 import GoannaWatch.App;
 import GoannaWatch.account.model.*;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+import javafx.collections.transformation.FilteredList;
+import javafx.collections.transformation.SortedList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import GoannaWatch.observations.model.IObservationDAO;
@@ -15,6 +19,7 @@ import GoannaWatch.observations.model.Observation;
 
 import java.io.IOException;
 import java.time.LocalDate;
+import java.util.Comparator;
 import java.util.InputMismatchException;
 import java.util.List;
 
@@ -26,7 +31,19 @@ public class ObservationController {
     private final IObservationDAO observationDAO;
 
     @FXML
-    private ListView<Observation> observationsListView;
+    private TableView<Observation> observationsTableView;
+
+    @FXML
+    private TableColumn<Observation, String> observerColumn;
+
+    @FXML
+    private TableColumn<Observation, String> locationColumn;
+
+    @FXML
+    private TableColumn<Observation, String> animalColumn;
+
+    @FXML
+    private TableColumn<Observation, String> dateColumn;
 
     @FXML
     private CheckBox showMineOnlyCheck;
@@ -43,6 +60,18 @@ public class ObservationController {
     @FXML
     private VBox observationContainer;
 
+    @FXML
+    private TextField searchTextField;
+
+    @FXML
+    private ComboBox<String> sortComboBox;
+
+    private final ObservableList<Observation> masterObservations = FXCollections.observableArrayList();
+
+    private FilteredList<Observation> filteredObservations;
+
+    private SortedList<Observation> sortedObservations;
+
     /**
      * Initialises the controller class. This method is automatically called after the .fxml file has been loaded.
      */
@@ -55,55 +84,55 @@ public class ObservationController {
      * @param observation The observation to select.
      */
     private void selectObservation(Observation observation) {
-        observationsListView.getSelectionModel().select(observation);
+        if (observation == null) {
+            observationContainer.setVisible(false);
+            return;
+        }
+
+        observationContainer.setVisible(true);
         locationTextField.setText(observation.getLocation());
         animalTextField.setText(observation.getAnimalSeen());
         datePicker.setValue(observation.getObservedAt());
     }
 
     /**
-     * Renders a cell in the observations list view by setting the text to the observation's details.
-     * @param listView The list view to render the cell for.
-     * @return The rendered cell.
+     * Initialises the observation controller. Sets up filtering, sorting, and a listener on the search field.
      */
-    private ListCell<Observation> renderCell(ListView<Observation> listView) {
-        return new ListCell<>() {
-            /**
-             * Handles the event when an observation is selected in the list view.
-             * @param mouseEvent The event to handle.
-             */
-            private void onObservationSelected(MouseEvent mouseEvent) {
-                ListCell<Observation> clickedCell = (ListCell<Observation>) mouseEvent.getSource();
-                Observation selected = clickedCell.getItem();
-                if (selected != null) selectObservation(selected);
-            }
+    @FXML
+    public void initialize() {
+        observerColumn.setCellValueFactory(cellData ->
+                new SimpleStringProperty(cellData.getValue().getObserver().getFullName()));
+        locationColumn.setCellValueFactory(cellData ->
+                new SimpleStringProperty(cellData.getValue().getLocation()));
+        animalColumn.setCellValueFactory(cellData ->
+                new SimpleStringProperty(cellData.getValue().getAnimalSeen()));
+        dateColumn.setCellValueFactory(cellData ->
+                new SimpleStringProperty(cellData.getValue().getObservedAt().toString()));
 
-            /**
-             * Updates the item in the cell by setting the text to the observation's details.
-             * @param observation The observation to update the cell with.
-             * @param empty Whether the cell is empty.
-             */
-            @Override
-            protected void updateItem(Observation observation, boolean empty) {
-                super.updateItem(observation, empty);
-                if (empty || observation == null) {
-                    setText(null);
-                    super.setOnMouseClicked(this::onObservationSelected);
-                } else {
-                    setText(observation.getAnimalSeen() + " at " + observation.getLocation()
-                    + " (" + observation.getObservedAt() + ")");
-                    super.setOnMouseClicked(this::onObservationSelected);
-                }
-            }
-        };
+        filteredObservations = new FilteredList<>(masterObservations, o -> true);
+        sortedObservations = new SortedList<>(filteredObservations);
+        observationsTableView.setItems(sortedObservations);
+
+        sortComboBox.setItems(FXCollections.observableArrayList(
+                "Date (Newest first)", "Date (Oldest first)", "Animal", "Location"));
+        sortComboBox.getSelectionModel().selectFirst();
+        sortComboBox.setOnAction(e -> applySort());
+
+        searchTextField.textProperty().addListener((obs, oldVal, newVal) -> applyFilter());
+
+        observationsTableView.getSelectionModel().selectedItemProperty().addListener(
+                (obs, oldSelection, newSelection) -> selectObservation(newSelection));
+
+        loadObservationsFromDao();
+        applySort();
+
+        observationsTableView.getSelectionModel().selectFirst();
     }
 
     /**
-     * Synchronises the observation list view with the observations in the database.
+     * Loads observations from DAO. If ShowMine checkbox toggled, it will on load observations created by current user.
      */
-    private void syncObservations() {
-        observationsListView.getItems().clear();
-
+    private void loadObservationsFromDao() {
         List<Observation> observations;
         if (showMineOnlyCheck.isSelected()) {
             Account currentAccount = Session.getCurrentAccount();
@@ -113,34 +142,60 @@ public class ObservationController {
         } else {
             observations = observationDAO.getAllObservations();
         }
-
-        boolean hasObservation = !observations.isEmpty();
-        if (hasObservation) {
-            observationsListView.getItems().addAll(observations);
-        }
-        observationContainer.setVisible(hasObservation);
+        masterObservations.setAll(observations);
+        observationContainer.setVisible(!observations.isEmpty());
     }
 
+    /**
+     * Handles the "show only mine" checkbox. Reloads observations from DAO.
+     */
     @FXML
-    public void initialize() {
-        observationsListView.setCellFactory(this::renderCell);
-        syncObservations();
+    private void onFilterChanged() {
+        loadObservationsFromDao();
+        applyFilter();
+    }
 
-        observationsListView.getSelectionModel().selectFirst();
-        Observation firstObservation = observationsListView.getSelectionModel().getSelectedItem();
-        if (firstObservation != null) {
-            selectObservation(firstObservation);
+    /**
+     * Filters objects based on searchTextField for animal or location.
+     * // TODO Extend so that filters Account and Date as well.
+     */
+    private void applyFilter() {
+        String query = searchTextField.getText();
+        if (query == null || query.isBlank()) {
+            filteredObservations.setPredicate(o -> true);
+        } else {
+            String lowerQuery = query.toLowerCase();
+            filteredObservations.setPredicate(o ->
+                    o.getAnimalSeen().toLowerCase().contains(lowerQuery)
+            || o.getLocation().toLowerCase().contains(lowerQuery));
         }
     }
 
-    @FXML
-    private void onShowMineOnlyCheck() {
-        syncObservations();
+    /**
+     * Sorts observations based on current selection in sortComboBox. Defaults to the newest observation.
+     * //FIXME Change to sorting by column headers? Maybe more intuitive and means we can make space on screen.
+     */
+    private void applySort() {
+        String selected = sortComboBox.getValue();
+        if (selected == null) {
+            return;
+        }
+        Comparator<Observation> comparator = switch (selected) {
+            case "Date (Newest first)" -> Comparator.comparing(Observation::getObservedAt).reversed();
+            case "Date (Oldest first)" -> Comparator.comparing(Observation::getObservedAt);
+            case "Animal" -> Comparator.comparing(Observation::getAnimalSeen, String.CASE_INSENSITIVE_ORDER);
+            case "Location" -> Comparator.comparing(Observation::getLocation, String.CASE_INSENSITIVE_ORDER);
+            default -> Comparator.comparing(Observation::getObservedAt).reversed();
+        };
+        sortedObservations.setComparator(comparator);
     }
 
+    /**
+     * Saves changes made to currently selected observation.
+     */
     @FXML
     private void onEditConfirm() {
-        Observation selected = observationsListView.getSelectionModel().getSelectedItem();
+        Observation selected = observationsTableView.getSelectionModel().getSelectedItem();
         if (selected == null) {
             return;
         }
@@ -149,21 +204,27 @@ public class ObservationController {
             selected.setAnimalSeen(animalTextField.getText());
             selected.setObservedAt(datePicker.getValue());
             observationDAO.updateObservation(selected);
-            syncObservations();
+            loadObservationsFromDao();
         } catch (InputMismatchException e) {
             showAlert(e.getMessage());
         }
     }
 
+    /**
+     * Deletes the currently selected observation.
+     */
     @FXML
     private void onDelete() {
-        Observation selected = observationsListView.getSelectionModel().getSelectedItem();
+        Observation selected = observationsTableView.getSelectionModel().getSelectedItem();
         if (selected != null) {
             observationDAO.deleteObservation(selected);
-            syncObservations();
+            loadObservationsFromDao();
         }
     }
 
+    /**
+     * Creates a new observation with default placeholder values.
+     */
     @FXML
     private void onAdd() {
         Account currentAccount = Session.getCurrentAccount();
@@ -178,23 +239,30 @@ public class ObservationController {
 
         Observation newObservation = new Observation(currentAccount, DEFAULT_LOCATION, DEFAULT_ANIMAL, DEFAULT_DATE);
         observationDAO.addObservation(newObservation);
-        syncObservations();
+        loadObservationsFromDao();
 
-        selectObservation(newObservation);
+        observationsTableView.getSelectionModel().select(newObservation);
         locationTextField.requestFocus();
     }
 
+    /**
+     * Discards any unsaved changes in the detail pane.
+     */
     @FXML
     private void onCancel() {
-        Observation selected = observationsListView.getSelectionModel().getSelectedItem();
+        Observation selected = observationsTableView.getSelectionModel().getSelectedItem();
         if (selected != null) {
             selectObservation(selected);
         }
     }
 
+    /**
+     * Handles the action of clicking the back button. Loads the landing view of the application.
+     * @throws IOException If the .fxml file for the landing view isn't found.
+     */
     @FXML
     private void onBackButtonClick() throws IOException {
-        Stage stage = (Stage) observationsListView.getScene().getWindow();
+        Stage stage = (Stage) observationsTableView.getScene().getWindow();
         FXMLLoader fxmlLoader = new FXMLLoader(App.class.getResource("landing.fxml"));
         Scene scene = new Scene(fxmlLoader.load());
         stage.setScene(scene);
