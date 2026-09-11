@@ -27,6 +27,7 @@ public class SignupController {
     //TODO Bind button to enter key
     //TODO Link Login page
     //TODO Functionality for Remember Me checkbox
+    //TODO change from Alert to a listener so that it doesn't interrupt user input
 
     private final IAccountDAO accountDAO;
 

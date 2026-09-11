@@ -22,6 +22,8 @@ import java.util.Optional;
 public class LoginController {
     //TODO Bind button to enter key
     //TODO Link Signup Page
+    //TODO Change from Alert to something that doesn't create a new window.
+    // (Probably just a label or a Message using AtlantaFX)
 
     private final IAccountDAO accountDAO;
     private boolean rememberMe = false;

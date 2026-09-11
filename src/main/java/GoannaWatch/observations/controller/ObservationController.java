@@ -75,6 +75,8 @@ public class ObservationController {
     /**
      * Initialises the controller class. This method is automatically called after the .fxml file has been loaded.
      */
+
+    //TODO Create Notification popups using AtlantaFX for edit, delete, and Add, for action confirmation.
     public ObservationController() {
         observationDAO = new MockObservationDAO();
     }
