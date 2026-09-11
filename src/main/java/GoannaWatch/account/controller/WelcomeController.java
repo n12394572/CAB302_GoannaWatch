@@ -28,7 +28,7 @@ public class WelcomeController {
     protected void onLoginButtonClick() throws IOException {
         Stage stage = (Stage) loginButton.getScene().getWindow();
         FXMLLoader fxmlLoader = new FXMLLoader(App.class.getResource("login.fxml"));
-        Scene scene = new Scene(fxmlLoader.load(), App.WIDTH, App.HEIGHT);
+        Scene scene = new Scene(fxmlLoader.load());
         stage.setScene(scene);
     }
 
@@ -40,7 +40,7 @@ public class WelcomeController {
     protected void onSignupButtonClick() throws IOException {
         Stage stage = (Stage) signupButton.getScene().getWindow();
         FXMLLoader fxmlLoader = new FXMLLoader(App.class.getResource("signup.fxml"));
-        Scene scene = new Scene(fxmlLoader.load(), App.WIDTH, App.HEIGHT);
+        Scene scene = new Scene(fxmlLoader.load());
         stage.setScene(scene);
     }
 }

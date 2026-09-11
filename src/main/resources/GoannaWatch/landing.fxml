@@ -1,22 +1,91 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.geometry.Insets?>
-<?import javafx.scene.control.Label?>
-<?import javafx.scene.layout.VBox?>
-<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
 
-<VBox alignment="CENTER" spacing="20.0" xmlns="http://javafx.com/javafx"
-            xmlns:fx="http://javafx.com/fxml"
-            fx:controller="GoannaWatch.account.controller.LandingController"
-            prefHeight="400.0" prefWidth="600.0">
-    <padding>
-        <Insets top="40.0" bottom="40.0" left="40.0" right="40.0" />
-    </padding>
-
-    <Label fx:id="welcomeLabel" text="Welcome!" style="-fx-font-size: 26px; -fx-font-weight: bold;" />
-    <Label fx:id="emailLabel" text="" />
-
-    <Button fx:id="observationButton" text="Record Observation" prefWidth="200.0" onAction="#onObservationButtonClick" />
-    <Button fx:id="logoutButton" text="Log Out" prefWidth="200.0" onAction="#onLogoutButtonClick" />
-
+<VBox id="contentContainer" prefHeight="400.0" prefWidth="600.0" stylesheets="@pageStyling.css" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="GoannaWatch.account.controller.LandingController">
+    <HBox id="pageContent" prefHeight="91.0" prefWidth="573.0">
+        <VBox id="contentContainer" alignment="CENTER_LEFT">
+            <Label id="pageContent" prefHeight="56.0" prefWidth="223.0" text="Goanna Watch">
+                <font>
+                    <Font name="System Bold" size="18.0" />
+                </font>
+            </Label>
+        </VBox>
+        <VBox id="contentContainer" alignment="CENTER">
+            <Label fx:id="welcomeLabel" text="Welcome!" style="-fx-font-size: 26px; -fx-font-weight: bold;" />
+            <Label fx:id="emailLabel" text="" />
+        </VBox>
+        <VBox id="contentContainer" alignment="CENTER_RIGHT" prefHeight="86.0" prefWidth="418.0">
+            <Label alignment="CENTER" text="Dashboard">
+                <font>
+                    <Font name="System Bold" size="12.0" />
+                </font>
+            </Label>
+            <Label text="Profile | Log out" />
+        </VBox>
+    </HBox>
+    <ButtonBar id="pageContent" nodeOrientation="RIGHT_TO_LEFT">
+        <buttons>
+            <Button fx:id="newObservationButton" onAction="#onNewObservationButtonClick" text="New Observation" />
+            <Button fx:id="historyButton" onAction="#onHistoryButtonClick" text="History" />
+            <Button fx:id="mapButton" onAction="#onMapButtonClick" text="Map" />
+            <Button fx:id="dashboardButton" onAction="#onDashboardButtonClick" text="Dashboard" />
+        </buttons>
+    </ButtonBar>
+    <GridPane hgap="10" vgap="10">
+        <VBox>
+            <HBox>
+                <VBox id="pageContent">
+                    <Label text="Recent Observations">
+                  <font>
+                     <Font name="System Bold" size="12.0" />
+                  </font></Label>
+                    <Label text="Observation 1" />
+                    <Label text="Observation 2" />
+                    <Label text="Observation 3" />
+                    <Label text="Observation 4" />
+                </VBox>
+                <VBox id="contentContainer">
+                    <VBox id="pageContent">
+                        <Label text="Observation Map Preview">
+                            <font>
+                                <Font name="System Bold" size="12.0" />
+                            </font>
+                        </Label>
+                    </VBox>
+                    <VBox id="pageContent">
+                        <Label text="Selected Observation">
+                            <font>
+                                <Font name="System Bold" size="12.0" />
+                            </font>
+                        </Label>
+                    </VBox>
+                </VBox>
+                <VBox id="contentContainer">
+                    <VBox id="pageContent">
+                        <Label text="Quick Actions">
+                            <font>
+                                <Font name="System Bold" size="12.0" />
+                            </font>
+                        </Label>
+                    </VBox>
+                    <VBox id="pageContent">
+                        <Label text="Wildlife Resources">
+                        <font>
+                            <Font name="System Bold" size="12.0" />
+                        </font>
+                        </Label>
+                    </VBox>
+                </VBox>
+            </HBox>
+        </VBox>
+      <columnConstraints>
+         <ColumnConstraints />
+      </columnConstraints>
+      <rowConstraints>
+         <RowConstraints />
+      </rowConstraints>
+    </GridPane>
 </VBox>

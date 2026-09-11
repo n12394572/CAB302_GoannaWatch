@@ -5,7 +5,7 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 
-<VBox id="contentContainer" alignment="TOP_CENTER" spacing="5" stylesheets="@pageStyling.css" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="account.controller.LoginController">
+<VBox id="contentContainer" alignment="TOP_CENTER" spacing="5" stylesheets="@pageStyling.css" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="GoannaWatch.account.controller.LoginController">
     <HBox id="pageContent" prefHeight="91.0" prefWidth="573.0">
         <VBox id="contentContainer" alignment="CENTER_LEFT">
             <Label id="pageContent" prefHeight="56.0" prefWidth="223.0" text="Goanna Watch">
@@ -31,15 +31,18 @@
             <Label id="pageTitle" text="Welcome Back." wrapText="true" />
             <Label id="secondaryText" text="Sign in to continue recording local wildlife." wrapText="true" />
             <Label id="userInputLabel" text="Email Address" />
-            <TextField id="userInput" fx:id="emailAddress" prefHeight="30" prefWidth="200" promptText="Enter your email address..." />
+            <TextField id="userInput" fx:id="emailTextField" prefHeight="30" prefWidth="200" promptText="Enter your email address..." />
             <Label id="userInputLabel" text="Password" />
-            <TextField id="userInput" fx:id="passwordLogin" prefHeight="30" prefWidth="100" promptText="Enter your password..." />
-            <CheckBox id="contentContainer" fx:id="rememberMe" alignment="BOTTOM_LEFT" onAction="#rememberMeClick" text="Remember Me" />
-            <Button id="submitForm" prefHeight="62.0" prefWidth="326.0" text="SIGN IN" /> <!-- add link to log-in check mechanism later -->
-            <HBox alignment="BOTTOM_CENTER">
-                <Label id="contentContainer" text="Don't have an account? " />
-                <Hyperlink id="contentContainer" fx:id="SignupRedirect" onAction="#signupRedirectClick" text="LOG IN here" />
-            </HBox>
+            <PasswordField id="userInput" fx:id="passwordField" prefHeight="30" prefWidth="100" promptText="Enter your password..." />
+            <CheckBox id="contentContainer" fx:id="rememberMeCheck" alignment="BOTTOM_LEFT" onAction="#onRememberMeCheck" text="Remember Me" />
+            <VBox alignment="CENTER">
+                <Button text="LOG IN" fx:id="loginButton" prefHeight="50" prefWidth="300" onAction="#onNextButtonClick"/>
+                <Button text="Go Back" fx:id="cancelButton" prefHeight="50" prefWidth="300" onAction="#onCancelButtonClick"/>
+                <HBox alignment="BOTTOM_CENTER">
+                    <Label text="Don't have a GoannaWatch account?               "/>
+                    <Button text="Sign up" fx:id="signupButton" prefHeight="50" prefWidth="300" onAction="#onSignupRedirectClick"/>
+                </HBox>
+            </VBox>
         </VBox>
       <columnConstraints>
          <ColumnConstraints />

@@ -27,7 +27,16 @@ public class LandingController {
     private Button logoutButton;
 
     @FXML
-    private Button observationButton;
+    private Button newObservationButton;
+
+    @FXML
+    private Button historyButton;
+
+    @FXML
+    private Button mapButton;
+
+    @FXML
+    private Button dashboardButton;
 
     /**
      * Initialises the controller class. This method is automatically called after the fxml file has been loaded.
@@ -50,7 +59,7 @@ public class LandingController {
         Session.clear();
         Stage stage = (Stage) logoutButton.getScene().getWindow();
         FXMLLoader fxmlLoader = new FXMLLoader(App.class.getResource("welcome.fxml"));
-        Scene scene = new Scene(fxmlLoader.load(),800,600);
+        Scene scene = new Scene(fxmlLoader.load());
         stage.setScene(scene);
     }
 
@@ -59,10 +68,37 @@ public class LandingController {
      * @throws IOException If the .fxml file for the observation view isn't found.
      */
     @FXML
-    protected void onObservationButtonClick() throws IOException {
-        Stage stage = (Stage) observationButton.getScene().getWindow();
+    protected void onNewObservationButtonClick() throws IOException {
+        Stage stage = (Stage) newObservationButton.getScene().getWindow();
         FXMLLoader fxmlLoader = new FXMLLoader(App.class.getResource("observation.fxml"));
-        Scene scene = new Scene(fxmlLoader.load(),App.WIDTH, App.HEIGHT);
+        Scene scene = new Scene(fxmlLoader.load());
+        stage.setScene(scene);
+    }
+
+    @FXML
+    //TODO Create history page
+    protected void onHistoryButtonClick() throws IOException {
+        Stage stage = (Stage) historyButton.getScene().getWindow();
+        FXMLLoader fxmlLoader = new FXMLLoader(App.class.getResource("NotImplemented.fxml"));
+        Scene scene = new Scene(fxmlLoader.load());
+        stage.setScene(scene);
+    }
+
+    @FXML
+    //TODO create Map page
+    protected void onMapButtonClick() throws IOException {
+        Stage stage = (Stage) mapButton.getScene().getWindow();
+        FXMLLoader fxmlLoader = new FXMLLoader(App.class.getResource("NotImplemented.fxml"));
+        Scene scene = new Scene(fxmlLoader.load());
+        stage.setScene(scene);
+    }
+
+    @FXML
+    //TODO Create Dashboard page
+    protected void onDashboardButtonClick() throws IOException {
+        Stage stage = (Stage) mapButton.getScene().getWindow();
+        FXMLLoader fxmlLoader = new FXMLLoader(App.class.getResource("NotImplemented.fxml"));
+        Scene scene = new Scene(fxmlLoader.load());
         stage.setScene(scene);
     }
 }

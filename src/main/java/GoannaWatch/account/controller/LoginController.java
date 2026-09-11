@@ -38,6 +38,9 @@ public class LoginController {
     private CheckBox rememberMeCheck;
 
     @FXML
+    private Button signupButton;
+
+    @FXML
     private Button loginButton;
     @FXML
     private Button cancelButton;
@@ -65,7 +68,7 @@ public class LoginController {
     private void onCancelButtonClick() throws IOException {
         Stage stage = (Stage) cancelButton.getScene().getWindow();
         FXMLLoader fxmlLoader = new FXMLLoader(App.class.getResource("welcome.fxml"));
-        Scene scene = new Scene(fxmlLoader.load(), App.WIDTH, App.HEIGHT);
+        Scene scene = new Scene(fxmlLoader.load());
         stage.setScene(scene);
     }
 
@@ -94,7 +97,7 @@ public class LoginController {
 
         Stage stage = (Stage) loginButton.getScene().getWindow();
         FXMLLoader fxmlLoader = new FXMLLoader(App.class.getResource("landing.fxml"));
-        Scene scene = new Scene(fxmlLoader.load(), App.WIDTH, App.HEIGHT);
+        Scene scene = new Scene(fxmlLoader.load());
         stage.setScene(scene);
     }
 
@@ -108,6 +111,14 @@ public class LoginController {
         return accounts.stream()
                 .filter(a -> a.getEmail().equalsIgnoreCase(email))
                 .findFirst();
+    }
+
+    @FXML
+    private void onSignupRedirectClick() throws IOException {
+        Stage stage = (Stage) signupButton.getScene().getWindow();
+        FXMLLoader fxmlLoader = new FXMLLoader(App.class.getResource("signup.fxml"));
+        Scene scene = new Scene(fxmlLoader.load());
+        stage.setScene(scene);
     }
 
     /**

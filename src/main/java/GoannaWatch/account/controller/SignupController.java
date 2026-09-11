@@ -49,6 +49,9 @@ public class SignupController {
     @FXML
     private Button cancelButton;
 
+    @FXML
+    private Button loginButton;
+
     /**
      * Constructs a new SignupController with an AccountManager that  uses an in-memory database to perform CRUD operations on accounts.
      */
@@ -64,7 +67,7 @@ public class SignupController {
     private void onCancelButtonClick() throws IOException {
         Stage stage = (Stage) cancelButton.getScene().getWindow();
         FXMLLoader fxmlLoader = new FXMLLoader(App.class.getResource("welcome.fxml"));
-        Scene scene = new Scene(fxmlLoader.load(),App.WIDTH, App.HEIGHT);
+        Scene scene = new Scene(fxmlLoader.load());
         stage.setScene(scene);
     }
 
@@ -92,7 +95,7 @@ public class SignupController {
 
             Stage stage = (Stage) submitButton.getScene().getWindow();
             FXMLLoader fxmlLoader = new FXMLLoader(App.class.getResource("landing.fxml"));
-            Scene scene = new Scene(fxmlLoader.load(), App.WIDTH, App.HEIGHT);
+            Scene scene = new Scene(fxmlLoader.load());
             stage.setScene(scene);
 
         } catch (InputMismatchException | IllegalArgumentException e) {
@@ -100,6 +103,14 @@ public class SignupController {
         }
 
 
+    }
+
+    @FXML
+    private void onLoginButtonClick() throws IOException {
+        Stage stage = (Stage) loginButton.getScene().getWindow();
+        FXMLLoader fxmlLoader = new FXMLLoader(App.class.getResource("login.fxml"));
+        Scene scene = new Scene(fxmlLoader.load());
+        stage.setScene(scene);
     }
 
     /**

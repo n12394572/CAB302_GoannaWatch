@@ -15,15 +15,13 @@ import java.io.IOException;
  * The main application class for the account.App application. This class extends the JavaFX Application class and starts the JavaFx lifecycle.
  */
 public class App extends Application {
-    public static final double WIDTH = 800;
-    public static final double HEIGHT = 600;
 
     @Override
     public void start(Stage stage) throws IOException {
         Application.setUserAgentStylesheet(new PrimerDark().getUserAgentStylesheet());
 
         FXMLLoader fxmlLoader = new FXMLLoader(App.class.getResource("welcome.fxml"));
-        Scene scene = new Scene(fxmlLoader.load(), WIDTH, HEIGHT);
+        Scene scene = new Scene(fxmlLoader.load());
         stage.setTitle("GoannaWatch");
         stage.setScene(scene);
         stage.show();
