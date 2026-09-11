@@ -1,5 +1,6 @@
 package account.controller;
 
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
@@ -33,6 +34,9 @@ public class LoginController {
     @FXML
     private void onNextButtonClick() {
         System.out.println("Next clicked");
+    }
+
+    public void signupRedirectClick() {
     }
 }
 

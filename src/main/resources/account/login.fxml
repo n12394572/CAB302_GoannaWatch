@@ -1,40 +1,51 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.geometry.Insets?>
-<?import javafx.scene.control.Label?>
-<?import javafx.scene.layout.VBox?>
-<?import javafx.scene.control.Button?>
-<?import javafx.scene.control.TextArea?>
-<?import javafx.scene.control.CheckBox?>
-<?import javafx.scene.layout.HBox?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
 
-<?import javafx.scene.control.TextField?>
-<VBox spacing="20.0" xmlns:fx="http://javafx.com/fxml"
-      fx:controller="account.controller.LoginController"
-        stylesheets="@account.css">
-    <padding>
-        <Insets bottom="20.0" left="20.0" right="20.0" top="20.0"/>
-    </padding>
-    <Label text="Welcome Back." id="pageTitle" wrapText="true"/>
-    <Label text="Sign in to continue recording local wildlife." id="secondaryText" wrapText="true"/>
-
-    <Label id="userInputLabel" text="Email Address"/>
-    <TextField id="userInput" fx:id="emailAddress"
-               promptText="Enter your email address..." prefHeight="50" prefWidth="100"
-    />
-    <Label id="userInputLabel" text="Password"/>
-    <TextField id="userInput" fx:id="passwordLogin"
-               promptText="Enter your password..." prefHeight="50" prefWidth="100"
-    />
-    <CheckBox fx:id="rememberMe"
-              text="Remember Me"
-              onAction="#rememberMeClick"
-    />
-    <VBox alignment="CENTER">
-        <Button text="LOG IN" id="submitForm" prefHeight="50" prefWidth="300"/> <!-- add link to log-in check mechanism later -->
-        <HBox alignment="BOTTOM_CENTER">
-            <Label text="Don't have an account?               "/>
-            <Label text="insert SIGN UP page link here"/>
-        </HBox>
-    </VBox>
+<VBox id="contentContainer" alignment="TOP_CENTER" spacing="5" stylesheets="@pageStyling.css" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="account.controller.LoginController">
+    <HBox id="pageContent" prefHeight="91.0" prefWidth="573.0">
+        <VBox id="contentContainer" alignment="CENTER_LEFT">
+            <Label id="pageContent" prefHeight="56.0" prefWidth="223.0" text="Goanna Watch">
+                <font>
+                    <Font name="System Bold" size="18.0" />
+                </font>
+            </Label>
+        </VBox>
+        <VBox id="contentContainer" alignment="CENTER_RIGHT" prefHeight="86.0" prefWidth="418.0">
+            <Label alignment="CENTER" text="Dashboard">
+                <font>
+                    <Font name="System Bold" size="12.0" />
+                </font>
+            </Label>
+            <Label text="Profile | Log out" />
+        </VBox>
+    </HBox>
+    <GridPane alignment="CENTER" hgap="10" vgap="10">
+        <padding>
+            <Insets bottom="10" left="25" right="25" top="10" />
+        </padding>
+        <VBox spacing="10" id="pageContent">
+            <Label id="pageTitle" text="Welcome Back." wrapText="true" />
+            <Label id="secondaryText" text="Sign in to continue recording local wildlife." wrapText="true" />
+            <Label id="userInputLabel" text="Email Address" />
+            <TextField id="userInput" fx:id="emailAddress" prefHeight="30" prefWidth="200" promptText="Enter your email address..." />
+            <Label id="userInputLabel" text="Password" />
+            <TextField id="userInput" fx:id="passwordLogin" prefHeight="30" prefWidth="100" promptText="Enter your password..." />
+            <CheckBox id="contentContainer" fx:id="rememberMe" alignment="BOTTOM_LEFT" onAction="#rememberMeClick" text="Remember Me" />
+            <Button id="submitForm" prefHeight="62.0" prefWidth="326.0" text="SIGN IN" /> <!-- add link to log-in check mechanism later -->
+            <HBox alignment="BOTTOM_CENTER">
+                <Label id="contentContainer" text="Don't have an account? " />
+                <Hyperlink id="contentContainer" fx:id="SignupRedirect" onAction="#signupRedirectClick" text="LOG IN here" />
+            </HBox>
+        </VBox>
+      <columnConstraints>
+         <ColumnConstraints />
+      </columnConstraints>
+      <rowConstraints>
+         <RowConstraints />
+      </rowConstraints>
+    </GridPane>
 </VBox>
