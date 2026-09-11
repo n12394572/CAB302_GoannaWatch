@@ -1,44 +1,53 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.geometry.Insets?>
-<?import javafx.scene.control.Label?>
-<?import javafx.scene.layout.VBox?>
-<?import javafx.scene.control.Button?>
-<?import javafx.scene.control.TextArea?>
-<?import javafx.scene.control.CheckBox?>
-<?import javafx.scene.layout.HBox?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
 
-<?import javafx.scene.control.TextField?>
-<?import javafx.scene.control.PasswordField?>
-<VBox spacing="20.0" xmlns:fx="http://javafx.com/fxml"
-      fx:controller="GoannaWatch.account.controller.SignupController">
-    <padding>
-        <Insets bottom="20.0" left="20.0" right="20.0" top="20.0"/>
-    </padding>
-    <Label text="Welcome to Goanna Watch!" id="pageTitle" wrapText="true"/>
-    <Label text="Sign in to begin recording local wildlife." id="secondaryText" wrapText="true"/>
+<VBox alignment="TOP_CENTER" stylesheets="@pageStyling.css" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/17.0.12" fx:controller="account.controller.SignupController">
+    <HBox id="pageContent" prefHeight="91.0" prefWidth="573.0">
+        <VBox id="contentContainer" alignment="CENTER_LEFT">
+            <Label id="pageContent" prefHeight="56.0" prefWidth="223.0" text="Goanna Watch">
+                <font>
+                    <Font name="System Bold" size="18.0" />
+                </font>
+            </Label>
+        </VBox>
+        <VBox id="contentContainer" alignment="CENTER_RIGHT" prefHeight="86.0" prefWidth="418.0">
+            <Label alignment="CENTER" text="Dashboard">
+                <font>
+                    <Font name="System Bold" size="12.0" />
+                </font>
+            </Label>
+            <Label text="Profile | Log out" />
+        </VBox>
+    </HBox>
 
-    <Label id="userInputLabel" text="First Name"/>
-    <TextField id="userInput" fx:id="firstNameTextField"
-               promptText="Enter your First Name..." prefHeight="50" prefWidth="100"
-    />
-    <Label id="userInputLabel" text="Last Name"/>
-    <TextField id="userInput" fx:id="lastNameTextField"
-               promptText="Enter your Last Name..." prefHeight="50" prefWidth="100"
-    />
-    <Label id="userInputLabel" text="Email Address"/>
-    <TextField id="userInput" fx:id="emailTextField"
-               promptText="Enter your email address..." prefHeight="50" prefWidth="100"
-    />
-    <Label id="userInputLabel" text="Password"/>
-    <PasswordField id="userInput" fx:id="passwordField"
-                   promptText="Enter your password..." prefHeight="50" prefWidth="100"
-    />
-    <VBox alignment="CENTER">
-        <Button text="Create Account" fx:id="submitButton" prefHeight="50" prefWidth="300" onAction="#onSubmitButtonClick"/>
-        <HBox alignment="BOTTOM_CENTER">
-            <Label text="Already have an GoannaWatch?               "/>
-            <Label text="insert LOG IN page link here"/>
-        </HBox>
-    </VBox>
+    <GridPane alignment="CENTER" hgap="10" vgap="10">
+        <padding>
+            <Insets bottom="10" left="25" right="25" top="25" />
+        </padding>
+        <VBox id="pageContent">
+            <Label id="pageTitle" text="Welcome to Goanna Watch!" wrapText="true" />
+            <Label id="secondaryText" text="Sign up to begin recording local wildlife." wrapText="true" />
+            <Label id="userInputLabel" text="Email Address" />
+            <TextField id="userInput" fx:id="emailAddress" prefHeight="30" prefWidth="200" promptText="Enter your email address..." />
+            <Label id="userInputLabel" text="Password" />
+            <TextField id="userInput" fx:id="passwordSignUp" prefHeight="30" prefWidth="200" promptText="Enter your password..." />
+            <Label id="userInputLabel" text="User type" />
+            <ChoiceBox id="userInput" fx:id="userType" onShowing="#userTypeChoice" />
+            <Button id="submitForm" prefHeight="62.0" prefWidth="411.0" text="SIGN UP" /> <!-- add link to log-in check mechanism later -->
+            <HBox alignment="BOTTOM_CENTER">
+                <Label id="contentContainer" text="Already have an account? " />
+                <Hyperlink id="contentContainer" fx:id="loginRedirect" onAction="#loginRedirectClick" text="LOG IN here" />
+            </HBox>
+        </VBox>
+      <columnConstraints>
+         <ColumnConstraints />
+      </columnConstraints>
+      <rowConstraints>
+         <RowConstraints />
+      </rowConstraints>
+    </GridPane>
 </VBox>
