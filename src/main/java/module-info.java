@@ -7,6 +7,7 @@ module GoannaWatch {
     requires javafx.controls;
     requires javafx.fxml;
     requires java.sql;
+    requires org.xerial.sqlitejdbc;
     requires org.apache.commons.validator;
     requires atlantafx.base;
 

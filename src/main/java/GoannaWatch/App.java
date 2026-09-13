@@ -8,6 +8,8 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
+import GoannaWatch.database.DatabaseInitializer;
+import java.sql.SQLException;
 
 import java.io.IOException;
 
@@ -16,8 +18,14 @@ import java.io.IOException;
  */
 public class App extends Application {
 
+
     @Override
     public void start(Stage stage) throws IOException {
+        try {
+            DatabaseInitializer.initialize();
+        } catch (SQLException e) {
+            throw new IOException("Could not initialize the database.", e);
+        }
         Application.setUserAgentStylesheet(new PrimerDark().getUserAgentStylesheet());
 
         FXMLLoader fxmlLoader = new FXMLLoader(App.class.getResource("welcome.fxml"));
