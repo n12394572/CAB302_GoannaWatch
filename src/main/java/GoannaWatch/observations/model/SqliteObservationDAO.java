@@ -2,6 +2,9 @@ package GoannaWatch.observations.model;
 
 import GoannaWatch.database.DatabaseConnection;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import GoannaWatch.account.model.Account;
 import GoannaWatch.account.model.SqliteAccountDAO;
 import GoannaWatch.database.DatabaseInitializer;
@@ -86,19 +89,74 @@ public class SqliteObservationDAO {
             DatabaseInitializer.initialize();
 
             SqliteObservationDAO dao = new SqliteObservationDAO();
-            Observation observation = dao.getObservation(1);
+            List<Observation> observations = dao.getAllObservations();
+            SqliteAccountDAO accountDAO = new SqliteAccountDAO();
+            Account account = accountDAO.getAccountByEmail("min.test2@example.com");
 
-            if (observation != null) {
-                System.out.println("ID: " + observation.getId());
-                System.out.println("Observer: " + observation.getObserver().getFullName());
-                System.out.println("Location: " + observation.getLocation());
-                System.out.println("Animal: " + observation.getAnimalSeen());
-                System.out.println("Date: " + observation.getObservedAt());
-            } else {
-                System.out.println("Observation not found.");
+            if (account == null) {
+                System.out.println("Test account not found.");
+                return;
+            }
+
+            Observation secondObservation = new Observation(
+                    account,
+                    "Gold Coast",
+                    "Koala",
+                    LocalDate.now()
+            );
+            dao.addObservation(secondObservation);
+
+
+
+
+            System.out.println("Total observations: " + observations.size());
+
+            for (Observation observation : observations) {
+                System.out.println(
+                        observation.getId() + " | "
+                                + observation.getObserver().getFullName() + " | "
+                                + observation.getLocation() + " | "
+                                + observation.getAnimalSeen() + " | "
+                                + observation.getObservedAt()
+                );
             }
         } catch (SQLException e) {
-            System.err.println("Failed to read observation: " + e.getMessage());
+            System.err.println("Failed to read observations: " + e.getMessage());
         }
+    }
+    public List<Observation> getAllObservations() throws SQLException {
+        List<Observation> observations = new ArrayList<>();
+
+        String sql = """
+            SELECT observations.*, accounts.email AS observer_email
+            FROM observations
+            JOIN accounts ON observations.observer_id = accounts.id
+            ORDER BY observations.id
+            """;
+
+        try (Connection connection = DatabaseConnection.getConnection();
+             PreparedStatement statement = connection.prepareStatement(sql);
+             ResultSet result = statement.executeQuery()) {
+
+            SqliteAccountDAO accountDAO = new SqliteAccountDAO();
+
+            while (result.next()) {
+                Account observer = accountDAO.getAccountByEmail(
+                        result.getString("observer_email")
+                );
+
+                Observation observation = new Observation(
+                        observer,
+                        result.getString("location"),
+                        result.getString("animal_seen"),
+                        LocalDate.parse(result.getString("observed_at"))
+                );
+
+                observation.setId(result.getInt("id"));
+                observations.add(observation);
+            }
+        }
+
+        return observations;
     }
 }
