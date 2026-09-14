@@ -9,10 +9,7 @@ import GoannaWatch.account.model.Session;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Button;
-import javafx.scene.control.PasswordField;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.stage.Stage;
 
 import java.io.IOException;
@@ -49,8 +46,11 @@ public class SignupController {
     @FXML
     private Button cancelButton;
 
+    //@FXML
+    //private Button loginButton;
+
     @FXML
-    private Button loginButton;
+    private Hyperlink loginLink;
 
     /**
      * Constructs a new SignupController with an AccountManager that  uses an in-memory database to perform CRUD operations on accounts.
@@ -107,7 +107,8 @@ public class SignupController {
 
     @FXML
     private void onLoginButtonClick() throws IOException {
-        Stage stage = (Stage) loginButton.getScene().getWindow();
+        //Stage stage = (Stage) loginButton.getScene().getWindow();
+        Stage stage = (Stage) loginLink.getScene().getWindow();
         FXMLLoader fxmlLoader = new FXMLLoader(App.class.getResource("login.fxml"));
         Scene scene = new Scene(fxmlLoader.load());
         stage.setScene(scene);
