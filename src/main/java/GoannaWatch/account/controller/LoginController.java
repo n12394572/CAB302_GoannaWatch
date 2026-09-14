@@ -37,8 +37,11 @@ public class LoginController {
     @FXML
     private CheckBox rememberMeCheck;
 
+    //@FXML
+    //private Button signupButton;
+
     @FXML
-    private Button signupButton;
+    private Hyperlink signUpLink;
 
     @FXML
     private Button loginButton;
@@ -115,7 +118,8 @@ public class LoginController {
 
     @FXML
     private void onSignupRedirectClick() throws IOException {
-        Stage stage = (Stage) signupButton.getScene().getWindow();
+        //Stage stage = (Stage) signupButton.getScene().getWindow();
+        Stage stage = (Stage) signUpLink.getScene().getWindow();
         FXMLLoader fxmlLoader = new FXMLLoader(App.class.getResource("signup.fxml"));
         Scene scene = new Scene(fxmlLoader.load());
         stage.setScene(scene);
