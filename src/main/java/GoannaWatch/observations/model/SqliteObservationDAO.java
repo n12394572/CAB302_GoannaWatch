@@ -17,6 +17,11 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
+/**
+ * Saves and reads wildlife observations in SQLite.
+ * Each observation is linked to the account that created it.
+ * Query results are returned as Observation objects.
+ */
 public class SqliteObservationDAO {
 
     // Saves an observation and assigns its database ID.
@@ -86,6 +91,11 @@ public class SqliteObservationDAO {
         return null;
     }
 
+    /**
+     * Prints saved observations for a manual check.
+     *
+     * @param args command line arguments, not used
+     */
     public static void main(String[] args) {
         try {
             DatabaseInitializer.initialize();
