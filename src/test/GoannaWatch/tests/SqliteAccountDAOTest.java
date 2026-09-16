@@ -12,6 +12,9 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import GoannaWatch.account.model.Account;
 import GoannaWatch.account.model.SqliteAccountDAO;
 
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+
 /**
  * Tests saving and reading accounts in a temporary database.
  */
@@ -52,6 +55,9 @@ public class SqliteAccountDAOTest {
             assertNotNull(savedAccount);
             assertEquals("Min Test", savedAccount.getFullName());
             assertEquals("min@example.com", savedAccount.getEmail());
+            // Check the correct and incorrect passwords.
+            assertTrue(dao.checkPassword("min@example.com", "Test123!"));
+            assertFalse(dao.checkPassword("min@example.com", "Wrong123!"));
 
             // Restore the setting so it does not affect other tests.
         } finally {

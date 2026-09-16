@@ -93,7 +93,7 @@ public class LoginController {
         try {
             Account account = accountDAO.getAccountByEmail(email);
 
-            if (account == null || !account.getPassword().equals(password)) {
+            if (account == null || !accountDAO.checkPassword(email, password)) {
                 showAlert(
                         Alert.AlertType.ERROR,
                         "Login failed",

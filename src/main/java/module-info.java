@@ -10,6 +10,7 @@ module GoannaWatch {
     requires org.xerial.sqlitejdbc;
     requires org.apache.commons.validator;
     requires atlantafx.base;
+    requires password4j;
 
 
     opens GoannaWatch to javafx.fxml;
