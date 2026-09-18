@@ -20,9 +20,6 @@ import java.util.InputMismatchException;
  */
 public class SignupController {
 
-    //TODO Add password confirmation and some sort of security for password
-    //TODO Bind button to enter key
-    //TODO Link Login page
     //TODO Functionality for Remember Me checkbox
     //TODO change from Alert to a listener so that it doesn't interrupt user input
 
@@ -85,6 +82,15 @@ public class SignupController {
         String email = emailTextField.getText().trim();
         String password = passwordField.getText();
         String confirmPassword = confirmPasswordField.getText();
+
+        if (firstName == null || firstName.isBlank()
+                || lastName == null || lastName.isBlank()
+                || email.isBlank()
+                || password == null || password.isBlank()
+                || confirmPassword == null || confirmPassword.isBlank()) {
+            showAlert("Please fill in all fields.");
+            return;
+        }
 
         try {
             if (isEmailAlreadyRegistered(email)) {
@@ -150,6 +156,11 @@ public class SignupController {
         alert.setHeaderText(null);
         alert.setContentText(message);
         alert.showAndWait();
+    }
+
+    @FXML
+    public void initialize() {
+        submitButton.setDefaultButton(true);
     }
 }
 

@@ -22,10 +22,11 @@ import java.sql.Statement;
  * Each observation is linked to the account that created it.
  * Query results are returned as Observation objects.
  */
-public class SqliteObservationDAO {
+public class SqliteObservationDAO implements IObservationDAO{
 
     // Saves an observation and assigns its database ID.
-    public void addObservation(Observation observation) throws SQLException {
+    @Override
+    public void addObservation(Observation observation) {
         String sql = """
                 INSERT INTO observations
                 (observer_id, location, animal_seen, is_endangered, observed_at)
@@ -51,12 +52,14 @@ public class SqliteObservationDAO {
                     throw new SQLException("No observation ID was returned.");
                 }
             }
+        } catch (SQLException e) {
+            throw new RuntimeException("Failed to add observation: " + e.getMessage(), e);
         }
-
     }
 
     // Finds an observation by ID.
-    public Observation getObservation(int id) throws SQLException {
+    @Override
+    public Observation getObservation(int id) {
         String sql = """
                 SELECT observations.*, accounts.email AS observer_email
                 FROM observations
@@ -89,8 +92,46 @@ public class SqliteObservationDAO {
                 }
             }
         }
+        catch (SQLException e) {
+            throw new RuntimeException("Failed to get observation: " + e.getMessage(), e);
+        }
 
         return null;
+    }
+
+    @Override
+    public void updateObservation(Observation observation) {
+        String sql = """
+                UPDATE observations
+                SET location = ?, animal_seen = ?, observed_at = ?
+                WHERE id = ?
+                """;
+
+        try (Connection connection = DatabaseConnection.getConnection();
+        PreparedStatement statement = connection.prepareStatement(sql)){
+
+            statement.setString(1, observation.getLocation());
+            statement.setString(2, observation.getAnimalSeen());
+            statement.setString(3, observation.getObservedAt().toString());
+            statement.setInt(4, observation.getId());
+
+            statement.executeUpdate();
+        } catch (SQLException e) {
+            throw new RuntimeException("Failed to update observation: " + e.getMessage());
+        }
+    }
+
+    @Override
+    public void deleteObservation(Observation observation) {
+        String sql = "DELETE FROM observations WHERE id = ?";
+
+        try (Connection connection = DatabaseConnection.getConnection();
+        PreparedStatement statement = connection.prepareStatement(sql)) {
+            statement.setInt(1, observation.getId());
+            statement.executeUpdate();
+        } catch (SQLException e) {
+            throw new RuntimeException("Failed to delete observation: " + e.getMessage());
+        }
     }
 
     /**
@@ -123,7 +164,8 @@ public class SqliteObservationDAO {
         }
     }
 
-    public List<Observation> getAllObservations() throws SQLException {
+    @Override
+    public List<Observation> getAllObservations() {
         List<Observation> observations = new ArrayList<>();
 
         String sql = """
@@ -155,8 +197,54 @@ public class SqliteObservationDAO {
                 observation.setId(result.getInt("id"));
                 observations.add(observation);
             }
+        } catch (SQLException e) {
+            throw new RuntimeException("Failed to get observations: " + e.getMessage(), e);
         }
 
         return observations;
     }
+
+    @Override
+    public List<Observation> getObservationsByAccount(Account account) {
+        List<Observation> observations = new ArrayList<>();
+
+        String sql = """
+                SELECT observations.*, accounts.email AS observer_email
+                FROM observations
+                JOIN accounts ON observations.observer_id = accounts.id
+                WHERE observations.observer_id = ?
+                ORDER BY observations.id
+                """;
+
+        try (Connection connection = DatabaseConnection.getConnection();
+             PreparedStatement statement = connection.prepareStatement(sql)) {
+
+            statement.setInt(1, account.getId());
+
+            try (ResultSet result = statement.executeQuery()) {
+                SqliteAccountDAO accountDAO = new SqliteAccountDAO();
+
+                while (result.next()) {
+                    Account observer = accountDAO.getAccountByEmail(
+                            result.getString("observer_email")
+                    );
+
+                    Observation observation = new Observation(
+                            observer,
+                            result.getString("location"),
+                            result.getString("animal_seen"),
+                            LocalDate.parse(result.getString("observed_at"))
+                    );
+
+                    observation.setId(result.getInt("id"));
+                    observations.add(observation);
+                }
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException("Failed to get observations by account: " + e.getMessage(), e);
+        }
+
+        return observations;
+    }
+
 }
