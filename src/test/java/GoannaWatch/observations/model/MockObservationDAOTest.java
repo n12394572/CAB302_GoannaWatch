@@ -25,6 +25,7 @@ class MockObservationDAOTest {
                 account,
                 "Brisbane",
                 "Eastern Water Dragon",
+                "No",
                 LocalDate.of(2026, 9, 16)
         );
     }
@@ -59,6 +60,7 @@ class MockObservationDAOTest {
                 account,
                 "Gold Coast",
                 "Koala",
+                "No",
                 LocalDate.of(2026, 9, 15)
         );
 
@@ -79,6 +81,7 @@ class MockObservationDAOTest {
                 account,
                 "Gold Coast",
                 "Koala",
+                "No",
                 LocalDate.of(2026, 9, 15)
         );
 
@@ -164,6 +167,7 @@ class MockObservationDAOTest {
                 secondAccount,
                 "Gold Coast",
                 "Koala",
+                "No",
                 LocalDate.of(2026, 9, 15)
         );
 

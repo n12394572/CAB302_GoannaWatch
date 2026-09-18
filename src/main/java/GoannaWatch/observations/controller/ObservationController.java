@@ -44,6 +44,9 @@ public class ObservationController {
     private TableColumn<Observation, String> animalColumn;
 
     @FXML
+    private TableColumn<Observation, String> endangerColumn;
+
+    @FXML
     private TableColumn<Observation, String> dateColumn;
 
     @FXML
@@ -56,7 +59,13 @@ public class ObservationController {
     private TextField animalTextField;
 
     @FXML
-    private RadioButton endangerRadio;
+    private RadioButton endangeredYesRadio;
+
+    @FXML
+    private RadioButton endangeredNoRadio;
+
+    @FXML
+    private ToggleGroup isEndangered;
 
     @FXML
     private DatePicker datePicker;
@@ -93,9 +102,16 @@ public class ObservationController {
         }
 
         observationContainer.setVisible(true);
+
         locationTextField.setText(observation.getLocation());
         animalTextField.setText(observation.getAnimalSeen());
-        endangerRadio.setText(observation.getIsEndangered());
+
+        if ("Yes".equalsIgnoreCase(observation.getIsEndangered())) {
+            endangeredYesRadio.setSelected(true);
+        } else {
+            endangeredNoRadio.setSelected(true);
+        }
+
         datePicker.setValue(observation.getObservedAt());
     }
 
@@ -197,11 +213,18 @@ public class ObservationController {
         try {
             selected.setLocation(locationTextField.getText());
             selected.setAnimalSeen(animalTextField.getText());
-            selected.setIsEndangered(endangerRadio.getText());
+
+            RadioButton selectedEndangered = (RadioButton) isEndangered.getSelectedToggle();
+
+            if (selectedEndangered != null) {
+                selected.setIsEndangered(selectedEndangered.getText());
+            }
+
             selected.setObservedAt(datePicker.getValue());
 
             observationDAO.updateObservation(selected);
             loadObservationsFromDao();
+
         } catch (InputMismatchException e) {
             showAlert(e.getMessage());
         }

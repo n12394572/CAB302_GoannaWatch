@@ -13,19 +13,19 @@ class MockAccountDAOTest {
         Account account = new Account (
                 "Luke",
                 "Smith",
-                "luke.smith@example.com",
+                "mock-retrieve@example.com",
                 "Password1!"
         );
 
         dao.addAccount(account);
 
-        Account retrievedAccount = dao.getAccount(account.getId());
+        Account retrievedAccount = dao.getAccountByEmail("mock-retrieve@example.com");
 
         assertNotNull(retrievedAccount);
         assertEquals(account.getId(), retrievedAccount.getId());
         assertEquals("Luke", retrievedAccount.getFirstName());
         assertEquals("Smith", retrievedAccount.getLastName());
-        assertEquals("luke.smith@example.com", retrievedAccount.getEmail());
+        assertEquals("mock-retrieve@example.com", retrievedAccount.getEmail());
 
     }
 
@@ -82,7 +82,7 @@ class MockAccountDAOTest {
 
         dao.updateAccount(account);
 
-        Account updatedAccount = dao.getAccount(account.getId());
+        Account updatedAccount = dao.getAccountByEmail("luke.smith@example.com");
 
         assertNotNull(updatedAccount);
         assertEquals("Lucas", updatedAccount.getFirstName());
@@ -97,17 +97,17 @@ class MockAccountDAOTest {
         Account account = new Account(
                 "Luke",
                 "Smith",
-                "luke.smith@example.com",
+                "mock-delete@example.com",
                 "Password1!"
         );
 
         dao.addAccount(account);
 
-        int accountId = account.getId();
+        String email = account.getEmail();
 
         dao.deleteAccount(account);
 
-        assertNull(dao.getAccount(accountId));
+        assertNull(dao.getAccountByEmail(email));
 
     }
 
@@ -115,7 +115,7 @@ class MockAccountDAOTest {
     void requestingUnknownAccountShouldReturnNull() {
         MockAccountDAO dao = new MockAccountDAO();
 
-        Account account = dao.getAccount(Integer.MAX_VALUE);
+        Account account = dao.getAccountByEmail("unknown-account@example.com");
 
         assertNull(account);
     }

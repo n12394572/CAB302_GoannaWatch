@@ -86,8 +86,7 @@ public class SqliteAccountDAO implements IAccountDAO{
                 Account account = new Account(
                         result.getString("first_name"),
                         result.getString("last_name"),
-                        result.getString("email"),
-                        null
+                        result.getString("email")
                 );
                 account.setId(result.getInt("id"));
                 accounts.add(account);
@@ -116,8 +115,7 @@ public class SqliteAccountDAO implements IAccountDAO{
                     Account account = new Account(
                             result.getString("first_name"),
                             result.getString("last_name"),
-                            result.getString("email"),
-                            null // Only load account details, not the password.
+                            result.getString("email")
                     );
 
                     account.setId(result.getInt("id"));

@@ -103,7 +103,7 @@ public class SqliteObservationDAO implements IObservationDAO{
     public void updateObservation(Observation observation) {
         String sql = """
                 UPDATE observations
-                SET location = ?, animal_seen = ?, observed_at = ?
+                SET location = ?, animal_seen = ?, is_endangered = ?, observed_at = ?
                 WHERE id = ?
                 """;
 
@@ -112,8 +112,9 @@ public class SqliteObservationDAO implements IObservationDAO{
 
             statement.setString(1, observation.getLocation());
             statement.setString(2, observation.getAnimalSeen());
-            statement.setString(3, observation.getObservedAt().toString());
-            statement.setInt(4, observation.getId());
+            statement.setString(3, observation.getIsEndangered());
+            statement.setString(4, observation.getObservedAt().toString());
+            statement.setInt(5, observation.getId());
 
             statement.executeUpdate();
         } catch (SQLException e) {
@@ -233,6 +234,7 @@ public class SqliteObservationDAO implements IObservationDAO{
                             observer,
                             result.getString("location"),
                             result.getString("animal_seen"),
+                            result.getString("is_endangered"),
                             LocalDate.parse(result.getString("observed_at"))
                     );
 

@@ -29,6 +29,7 @@ class ObservationTest {
                 account,
                 "Brisbane",
                 "Eastern Water Dragon",
+                "No",
                 date
         );
 
@@ -45,6 +46,7 @@ class ObservationTest {
                         null,
                         "Brisbane",
                         "Eastern Water Dragon",
+                        "No",
                         LocalDate.of(2026, 9, 16)
                 )
         );
@@ -59,6 +61,7 @@ class ObservationTest {
                         account,
                         "",
                         "Eastern Water Dragon",
+                        "No",
                         LocalDate.of(2026, 9, 16)
                 )
         );
@@ -73,6 +76,7 @@ class ObservationTest {
                         account,
                         null,
                         "Eastern Water Dragon",
+                        "No",
                         LocalDate.of(2026, 9, 16)
                 )
         );
@@ -87,6 +91,7 @@ class ObservationTest {
                         account,
                         "Brisbane",
                         "",
+                        "No",
                         LocalDate.of(2026, 9, 16)
                 )
         );
@@ -101,6 +106,7 @@ class ObservationTest {
                         account,
                         "Brisbane",
                         null,
+                        "No",
                 LocalDate.of(2026, 9, 16)
                 )
         );
@@ -115,6 +121,7 @@ class ObservationTest {
                         account,
                         "Brisbane",
                         "Eastern Water Dragon",
+                        "No",
                         null
                 )
         );
@@ -126,6 +133,7 @@ class ObservationTest {
                 createValidAccount(),
                 "Brisbane",
                 "Eastern Water Dragon",
+                "No",
                 LocalDate.of(2026, 9, 16)
         );
 
@@ -140,6 +148,7 @@ class ObservationTest {
                 createValidAccount(),
                 "Brisbane",
                 "Eastern Water Dragon",
+                "No",
                 LocalDate.of(2026, 9, 16)
         );
 
@@ -154,6 +163,7 @@ class ObservationTest {
                 createValidAccount(),
                 "Brisbane",
                 "Eastern Water Dragon",
+                "No",
                 LocalDate.of(2026, 9, 16)
         );
 
@@ -181,6 +191,7 @@ class ObservationTest {
                 originalAccount,
                 "Brisbane",
                 "Eastern Water Dragon",
+                "No",
                 LocalDate.of(2026, 9, 16)
         );
 
@@ -195,6 +206,7 @@ class ObservationTest {
                 createValidAccount(),
                 "Brisbane",
                 "Eastern Water Dragon",
+                "No",
                 LocalDate.of(2026, 9, 16)
         );
 

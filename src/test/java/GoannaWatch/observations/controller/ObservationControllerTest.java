@@ -22,6 +22,7 @@ class ObservationControllerTest {
                 account,
                 "Brisbane",
                 "Eastern Water Dragon",
+                "No",
                 LocalDate.of(2026, 9, 16)
         );
     }

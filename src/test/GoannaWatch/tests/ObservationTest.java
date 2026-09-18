@@ -30,6 +30,7 @@ public class ObservationTest {
                 account,
                 "Brisbane",
                 "Goanna",
+                "No",
                 LocalDate.of(2026, 9, 15)
         );
 

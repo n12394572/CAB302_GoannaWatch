@@ -36,6 +36,15 @@ public class Account {
     }
 
     /**
+     * Constructs an account without loading a password. Used when reading account details from the database.
+     */
+    public Account(String firstName, String lastName, String email) {
+        setEmail(email);
+        setFirstName(firstName);
+        setLastName(lastName);
+    }
+
+    /**
      * Returns the ID of the account.
      * @return The ID of the account.
      */

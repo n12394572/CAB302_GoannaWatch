@@ -31,6 +31,7 @@
                     <TableColumn fx:id="observerColumn" text="Observer" prefWidth="130.0"/>
                     <TableColumn fx:id="locationColumn" text="Location" prefWidth="130.0"/>
                     <TableColumn fx:id="animalColumn" text="Animal" prefWidth="130.0"/>
+                    <TableColumn fx:id="endangerColumn" text="Endangered" prefWidth="130.0"/>
                     <TableColumn fx:id="dateColumn" text="Date" prefWidth="130.0"/>
                 </columns>
             </TableView>
@@ -49,15 +50,37 @@
                 <Label text="Animal: " GridPane.columnIndex="0" GridPane.rowIndex="1"/>
                 <Label text="Endangered:" GridPane.columnIndex="0" GridPane.rowIndex="2"/>
                 <Label text="Date: " GridPane.columnIndex="0" GridPane.rowIndex="3"/>
-                <TextField fx:id="locationTextField" GridPane.columnIndex="1" GridPane.rowIndex="0"/>
-                <TextField fx:id="animalTextField" GridPane.columnIndex="1" GridPane.rowIndex="1"/>
+
+                <TextField fx:id="locationTextField"
+                           GridPane.columnIndex="1"
+                           GridPane.rowIndex="0"/>
+                <TextField fx:id="animalTextField"
+                           GridPane.columnIndex="1"
+                           GridPane.rowIndex="1"/>
+
                 <fx:define>
-                    <ToggleGroup fx:id="isEndangered" GridPane.columnIndex="1" GridPane.rowIndex="2"/>
+                    <ToggleGroup fx:id="isEndangered" />
                 </fx:define>
-                <RadioButton text="Yes" toggleGroup="$isEndangered"/>
-                <RadioButton text="No" toggleGroup="$isEndangered"/>
-                <DatePicker fx:id="datePicker" GridPane.columnIndex="1" GridPane.rowIndex="3"/>
+
+                <HBox spacing="10"
+                      GridPane.columnIndex="1"
+                      GridPane.rowIndex="2">
+
+                    <RadioButton fx:id="endangeredYesRadio"
+                                 text="Yes"
+                                 toggleGroup="$isEndangered"/>
+
+                    <RadioButton fx:id="endangeredNoRadio"
+                                 text="No"
+                                 toggleGroup="$isEndangered"/>
+
+                </HBox>
+
+                <DatePicker fx:id="datePicker"
+                            GridPane.columnIndex="1"
+                            GridPane.rowIndex="3"/>
             </GridPane>
+
             <HBox spacing="10.0" alignment="CENTER">
                 <Button text="Confirm" onAction="#onEditConfirm"/>
                 <Button text="Cancel" onAction="#onCancel"/>

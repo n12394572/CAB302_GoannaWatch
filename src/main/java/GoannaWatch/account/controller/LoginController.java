@@ -139,7 +139,6 @@ public class LoginController {
         FXMLLoader fxmlLoader = new FXMLLoader(App.class.getResource("landing.fxml"));
         Scene scene = new Scene(fxmlLoader.load());
         stage.setScene(scene);
-    }
 
         } catch (SQLException e) {
             showLoginFeedback("Could not access the database. Please try again.");
