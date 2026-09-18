@@ -149,5 +149,10 @@ public class LoginController {
         alert.setContentText(message);
         alert.showAndWait();
     }
+
+    @FXML
+    public void initialize() {
+        loginButton.setDefaultButton(true);
+    }
 }
 
