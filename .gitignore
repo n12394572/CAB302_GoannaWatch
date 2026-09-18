@@ -37,3 +37,9 @@ build/
 ### Mac OS ###
 .DS_Store
 /docs/javadoc/
+
+# Local SQLite database
+goannawatch.db
+goannawatch.db-journal
+goannawatch.db-wal
+goannawatch.db-shm

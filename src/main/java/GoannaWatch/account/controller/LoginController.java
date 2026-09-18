@@ -1,9 +1,10 @@
 package GoannaWatch.account.controller;
 
 import GoannaWatch.App;
-import GoannaWatch.account.model.IAccountDAO;
 import GoannaWatch.account.model.Account;
-import GoannaWatch.account.model.MockAccountDAO;
+
+import GoannaWatch.account.model.SqliteAccountDAO;
+import java.sql.SQLException;
 
 import GoannaWatch.account.model.Session;
 import javafx.fxml.FXML;
@@ -13,8 +14,6 @@ import javafx.scene.control.*;
 import javafx.stage.Stage;
 
 import java.io.IOException;
-import java.util.List;
-import java.util.Optional;
 
 /**
  * Initialises the controller class. This method is automatically called after the .fxml file has been loaded.
@@ -25,7 +24,7 @@ public class LoginController {
     //TODO Change from Alert to something that doesn't create a new window.
     // (Probably just a label or a Message using AtlantaFX)
 
-    private final IAccountDAO accountDAO;
+    private final SqliteAccountDAO accountDAO;
     private boolean rememberMe = false;
 
     @FXML
@@ -52,7 +51,7 @@ public class LoginController {
      * Constructs a new LoginController with an AccountManager that uses an in-memory database to perform CRUD operations on accounts.
      */
     public LoginController() {
-        accountDAO = new MockAccountDAO();
+        accountDAO = new  SqliteAccountDAO();
     }
 
     /**
@@ -82,39 +81,49 @@ public class LoginController {
      */
     @FXML
     private void onNextButtonClick() throws IOException {
-        String email = emailTextField.getText() == null ? "" : emailTextField.getText().trim();
-        String password = passwordField.getText() == null ? "" : passwordField.getText().trim();
+        String email = emailTextField.getText().trim();
+        String password = passwordField.getText();
 
         if (email.isBlank() || password.isBlank()) {
-            showAlert(Alert.AlertType.WARNING, "Missing information", "Please enter both email or password.");
-        }
-
-        Optional<Account> matchedAccount = findAccountByEmail(email);
-
-        if (matchedAccount.isEmpty() || !matchedAccount.get().getPassword().equals(password)){
-            showAlert(Alert.AlertType.ERROR, "Login failed", "Incorrect email or password.");
+            showAlert(
+                    Alert.AlertType.WARNING,
+                    "Missing information",
+                    "Please enter both email and password."
+            );
             return;
         }
 
-        Session.setCurrentAccount(matchedAccount.get());
+        try {
+            Account account = accountDAO.getAccountByEmail(email);
 
-        Stage stage = (Stage) loginButton.getScene().getWindow();
-        FXMLLoader fxmlLoader = new FXMLLoader(App.class.getResource("landing.fxml"));
-        Scene scene = new Scene(fxmlLoader.load());
-        stage.setScene(scene);
+            if (account == null || !accountDAO.checkPassword(email, password)) {
+                showAlert(
+                        Alert.AlertType.ERROR,
+                        "Login failed",
+                        "Incorrect email or password."
+                );
+                return;
+            }
+
+            Session.setCurrentAccount(account);
+
+            Stage stage = (Stage) loginButton.getScene().getWindow();
+            FXMLLoader fxmlLoader =
+                    new FXMLLoader(App.class.getResource("landing.fxml"));
+            Scene scene = new Scene(fxmlLoader.load());
+            stage.setScene(scene);
+
+        } catch (SQLException e) {
+            showAlert(
+                    Alert.AlertType.ERROR,
+                    "Database error",
+                    "Could not access the database. Please try again."
+            );
+            System.err.println(e.getMessage());
+        }
     }
 
-    /**
-     * Searches all accounts for one whose email matches the given address.
-     * @param email The email address to search for
-     * @return An {@link Optional} containing the matching {@link Account} if one exists.
-     */
-    private Optional<Account> findAccountByEmail(String email) {
-        List<Account> accounts = accountDAO.getAllAccounts();
-        return accounts.stream()
-                .filter(a -> a.getEmail().equalsIgnoreCase(email))
-                .findFirst();
-    }
+
 
     @FXML
     private void onSignupRedirectClick() throws IOException {

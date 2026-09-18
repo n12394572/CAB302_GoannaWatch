@@ -1,8 +1,8 @@
 package GoannaWatch.account.controller;
 
 import GoannaWatch.App;
-import GoannaWatch.account.model.IAccountDAO;
-import GoannaWatch.account.model.MockAccountDAO;
+import GoannaWatch.account.model.SqliteAccountDAO;
+import java.sql.SQLException;
 import GoannaWatch.account.model.Account;
 
 import GoannaWatch.account.model.Session;
@@ -26,7 +26,7 @@ public class SignupController {
     //TODO Functionality for Remember Me checkbox
     //TODO change from Alert to a listener so that it doesn't interrupt user input
 
-    private final IAccountDAO accountDAO;
+    private final SqliteAccountDAO accountDAO;
 
     @FXML
     private TextField emailTextField;
@@ -56,7 +56,7 @@ public class SignupController {
      * Constructs a new SignupController with an AccountManager that  uses an in-memory database to perform CRUD operations on accounts.
      */
     public SignupController(){
-        accountDAO = new MockAccountDAO();
+        accountDAO = new SqliteAccountDAO();
     }
 
     /**
@@ -79,30 +79,39 @@ public class SignupController {
     private void onSubmitButtonClick() throws IOException {
         String firstName = firstNameTextField.getText();
         String lastName = lastNameTextField.getText();
-        String email = emailTextField.getText();
+        String email = emailTextField.getText().trim();
         String password = passwordField.getText();
 
-        if (isEmailAlreadyRegistered(email)){
-            showAlert("An account with that email already exists.");
-            return;
-        }
         try {
+            if (isEmailAlreadyRegistered(email)) {
+                showAlert("An account with that email already exists.");
+                return;
+            }
+
             Account newAccount = new Account(firstName, lastName, email, password);
             accountDAO.addAccount(newAccount);
-            System.out.println("Account created for " + newAccount.getFullName());
 
-            Session.setCurrentAccount(newAccount);
+            Account savedAccount = accountDAO.getAccountByEmail(email);
+
+            if (savedAccount == null) {
+                showAlert("Account saved, but could not be loaded. Please try logging in.");
+                return;
+            }
+
+            Session.setCurrentAccount(savedAccount);
 
             Stage stage = (Stage) submitButton.getScene().getWindow();
-            FXMLLoader fxmlLoader = new FXMLLoader(App.class.getResource("landing.fxml"));
+            FXMLLoader fxmlLoader =
+                    new FXMLLoader(App.class.getResource("landing.fxml"));
             Scene scene = new Scene(fxmlLoader.load());
             stage.setScene(scene);
 
         } catch (InputMismatchException | IllegalArgumentException e) {
             showAlert(e.getMessage());
+        } catch (SQLException e) {
+            showAlert("Could not access the database. Please try again.");
+            System.err.println(e.getMessage());
         }
-
-
     }
 
     @FXML
@@ -119,9 +128,8 @@ public class SignupController {
      * @param email The email to check if it is already registered.
      * @return The account linked to the email if it already exists, else false.
      */
-    private boolean isEmailAlreadyRegistered(String email) {
-        return accountDAO.getAllAccounts().stream()
-                .anyMatch(account -> account.getEmail().equalsIgnoreCase(email));
+    private boolean isEmailAlreadyRegistered(String email) throws SQLException {
+        return accountDAO.getAccountByEmail(email) != null;
     }
 
     /**
