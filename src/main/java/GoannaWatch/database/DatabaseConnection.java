@@ -1,6 +1,7 @@
 package GoannaWatch.database;
 
 // These classes are used to connect to the database and run SQL.
+
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
@@ -24,8 +25,9 @@ public class DatabaseConnection {
      */
     public static Connection getConnection() throws SQLException {
 
-        // Open the database file. SQLite creates it if it does not exist.
-        Connection connection = DriverManager.getConnection(DATABASE_URL);
+        // Use the configured URL, or the app's database if none is set.
+        String databaseUrl = System.getProperty("goannawatch.db.url", DATABASE_URL);
+        Connection connection = DriverManager.getConnection(databaseUrl);
 
         // The statement is closed automatically when this block finishes.
         try (Statement statement = connection.createStatement()) {

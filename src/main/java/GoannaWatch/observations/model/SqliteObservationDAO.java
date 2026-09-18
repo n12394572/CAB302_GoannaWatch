@@ -17,6 +17,11 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
+/**
+ * Saves and reads wildlife observations in SQLite.
+ * Each observation is linked to the account that created it.
+ * Query results are returned as Observation objects.
+ */
 public class SqliteObservationDAO {
 
     // Saves an observation and assigns its database ID.
@@ -48,14 +53,15 @@ public class SqliteObservationDAO {
         }
 
     }
+
     // Finds an observation by ID.
     public Observation getObservation(int id) throws SQLException {
         String sql = """
-            SELECT observations.*, accounts.email AS observer_email
-            FROM observations
-            JOIN accounts ON observations.observer_id = accounts.id
-            WHERE observations.id = ?
-            """;
+                SELECT observations.*, accounts.email AS observer_email
+                FROM observations
+                JOIN accounts ON observations.observer_id = accounts.id
+                WHERE observations.id = ?
+                """;
 
         try (Connection connection = DatabaseConnection.getConnection();
              PreparedStatement statement = connection.prepareStatement(sql)) {
@@ -84,29 +90,18 @@ public class SqliteObservationDAO {
 
         return null;
     }
+
+    /**
+     * Prints saved observations for a manual check.
+     *
+     * @param args command line arguments, not used
+     */
     public static void main(String[] args) {
         try {
             DatabaseInitializer.initialize();
 
             SqliteObservationDAO dao = new SqliteObservationDAO();
             List<Observation> observations = dao.getAllObservations();
-            SqliteAccountDAO accountDAO = new SqliteAccountDAO();
-            Account account = accountDAO.getAccountByEmail("min.test2@example.com");
-
-            if (account == null) {
-                System.out.println("Test account not found.");
-                return;
-            }
-
-            Observation secondObservation = new Observation(
-                    account,
-                    "Gold Coast",
-                    "Koala",
-                    LocalDate.now()
-            );
-            dao.addObservation(secondObservation);
-
-
 
 
             System.out.println("Total observations: " + observations.size());
@@ -124,15 +119,16 @@ public class SqliteObservationDAO {
             System.err.println("Failed to read observations: " + e.getMessage());
         }
     }
+
     public List<Observation> getAllObservations() throws SQLException {
         List<Observation> observations = new ArrayList<>();
 
         String sql = """
-            SELECT observations.*, accounts.email AS observer_email
-            FROM observations
-            JOIN accounts ON observations.observer_id = accounts.id
-            ORDER BY observations.id
-            """;
+                SELECT observations.*, accounts.email AS observer_email
+                FROM observations
+                JOIN accounts ON observations.observer_id = accounts.id
+                ORDER BY observations.id
+                """;
 
         try (Connection connection = DatabaseConnection.getConnection();
              PreparedStatement statement = connection.prepareStatement(sql);

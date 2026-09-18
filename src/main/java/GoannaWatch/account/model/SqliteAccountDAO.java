@@ -22,7 +22,9 @@ public class SqliteAccountDAO {
             statement.setString(1, account.getFirstName());
             statement.setString(2, account.getLastName());
             statement.setString(3, account.getEmail());
-            statement.setString(4, account.getPassword());
+            // Store the hash instead of the original password.
+            String hash = PasswordUtils.hashPassword(account.getPassword());
+            statement.setString(4, hash);
 
             statement.executeUpdate();
         }
@@ -40,11 +42,12 @@ public class SqliteAccountDAO {
 
             try (ResultSet result = statement.executeQuery()) {
                 if (result.next()) {
+                    // Load account details without putting a password in the object.
                     Account account = new Account(
                             result.getString("first_name"),
                             result.getString("last_name"),
                             result.getString("email"),
-                            result.getString("password")
+                            null // Only load account details, not the password.
                     );
 
                     account.setId(result.getInt("id"));
@@ -79,5 +82,34 @@ public class SqliteAccountDAO {
             System.err.println("Failed to read account: "
                     + e.getMessage());
         }
+    }
+
+    /**
+     * Checks the password for an account using its stored hash.
+     *
+     * @param email    the account email
+     * @param password the password entered by the user
+     * @return true if the account exists and the password matches
+     * @throws SQLException if the database query fails
+     */
+    public boolean checkPassword(String email, String password)
+            throws SQLException {
+
+        String sql = "SELECT password FROM accounts WHERE email = ?";
+
+        try (Connection connection = DatabaseConnection.getConnection();
+             PreparedStatement statement = connection.prepareStatement(sql)) {
+
+            statement.setString(1, email);
+
+            try (ResultSet result = statement.executeQuery()) {
+                if (result.next()) {
+                    String hash = result.getString("password");
+                    return PasswordUtils.checkPassword(password, hash);
+                }
+            }
+        }
+
+        return false;
     }
 }
