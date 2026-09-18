@@ -1,5 +1,6 @@
 package GoannaWatch.account.model;
 
+import java.sql.SQLException;
 import java.util.List;
 
 /**
@@ -31,10 +32,10 @@ public interface IAccountDAO {
     /**
      * Retrieves an account from the database.
      *
-     * @param id The id of the account to retrieve.
+     * @param email The email of the account to retrieve.
      * @return The account with the given id, or null if not found.
      */
-    public Account getAccount(int id);
+    Account getAccountByEmail(String email);
 
     /**
      * Retrieves all accounts from the database.

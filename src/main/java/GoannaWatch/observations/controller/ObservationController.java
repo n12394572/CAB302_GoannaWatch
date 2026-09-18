@@ -2,6 +2,7 @@ package GoannaWatch.observations.controller;
 
 import GoannaWatch.App;
 import GoannaWatch.account.model.*;
+import GoannaWatch.observations.model.SqliteObservationDAO;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -28,7 +29,7 @@ import java.util.List;
  */
 public class ObservationController {
 
-    private final IObservationDAO observationDAO;
+    private final SqliteObservationDAO observationDAO;
 
     @FXML
     private TableView<Observation> observationsTableView;
@@ -55,6 +56,9 @@ public class ObservationController {
     private TextField animalTextField;
 
     @FXML
+    private RadioButton endangerRadio;
+
+    @FXML
     private DatePicker datePicker;
 
     @FXML
@@ -62,9 +66,6 @@ public class ObservationController {
 
     @FXML
     private TextField searchTextField;
-
-    @FXML
-    private ComboBox<String> sortComboBox;
 
     private final ObservableList<Observation> masterObservations = FXCollections.observableArrayList();
 
@@ -78,7 +79,7 @@ public class ObservationController {
 
     //TODO Create Notification popups using AtlantaFX for edit, delete, and Add, for action confirmation.
     public ObservationController() {
-        observationDAO = new MockObservationDAO();
+        observationDAO = new SqliteObservationDAO();
     }
 
     /**
@@ -94,6 +95,7 @@ public class ObservationController {
         observationContainer.setVisible(true);
         locationTextField.setText(observation.getLocation());
         animalTextField.setText(observation.getAnimalSeen());
+        endangerRadio.setText(observation.getIsEndangered());
         datePicker.setValue(observation.getObservedAt());
     }
 
@@ -108,17 +110,18 @@ public class ObservationController {
                 new SimpleStringProperty(cellData.getValue().getLocation()));
         animalColumn.setCellValueFactory(cellData ->
                 new SimpleStringProperty(cellData.getValue().getAnimalSeen()));
+        endangerColumn.setCellValueFactory(cellData ->
+                new SimpleStringProperty(cellData.getValue().getIsEndangered()));
         dateColumn.setCellValueFactory(cellData ->
                 new SimpleStringProperty(cellData.getValue().getObservedAt().toString()));
 
         filteredObservations = new FilteredList<>(masterObservations, o -> true);
         sortedObservations = new SortedList<>(filteredObservations);
+        sortedObservations.comparatorProperty().bind(observationsTableView.comparatorProperty());
         observationsTableView.setItems(sortedObservations);
 
-        sortComboBox.setItems(FXCollections.observableArrayList(
-                "Date (Newest first)", "Date (Oldest first)", "Animal", "Location"));
-        sortComboBox.getSelectionModel().selectFirst();
-        sortComboBox.setOnAction(e -> applySort());
+        dateColumn.setSortType(TableColumn.SortType.DESCENDING);
+        observationsTableView.getSortOrder().add(dateColumn);
 
         searchTextField.textProperty().addListener((obs, oldVal, newVal) -> applyFilter());
 
@@ -126,7 +129,7 @@ public class ObservationController {
                 (obs, oldSelection, newSelection) -> selectObservation(newSelection));
 
         loadObservationsFromDao();
-        applySort();
+
 
         observationsTableView.getSelectionModel().selectFirst();
     }
@@ -183,25 +186,6 @@ public class ObservationController {
     }
 
     /**
-     * Sorts observations based on current selection in sortComboBox. Defaults to the newest observation.
-     * //FIXME Change to sorting by column headers? Maybe more intuitive and means we can make space on screen.
-     */
-    private void applySort() {
-        String selected = sortComboBox.getValue();
-        if (selected == null) {
-            return;
-        }
-        Comparator<Observation> comparator = switch (selected) {
-            case "Date (Newest first)" -> Comparator.comparing(Observation::getObservedAt).reversed();
-            case "Date (Oldest first)" -> Comparator.comparing(Observation::getObservedAt);
-            case "Animal" -> Comparator.comparing(Observation::getAnimalSeen, String.CASE_INSENSITIVE_ORDER);
-            case "Location" -> Comparator.comparing(Observation::getLocation, String.CASE_INSENSITIVE_ORDER);
-            default -> Comparator.comparing(Observation::getObservedAt).reversed();
-        };
-        sortedObservations.setComparator(comparator);
-    }
-
-    /**
      * Saves changes made to currently selected observation.
      */
     @FXML
@@ -213,7 +197,9 @@ public class ObservationController {
         try {
             selected.setLocation(locationTextField.getText());
             selected.setAnimalSeen(animalTextField.getText());
+            selected.setIsEndangered(endangerRadio.getText());
             selected.setObservedAt(datePicker.getValue());
+
             observationDAO.updateObservation(selected);
             loadObservationsFromDao();
         } catch (InputMismatchException e) {
@@ -246,9 +232,10 @@ public class ObservationController {
 
         final String DEFAULT_LOCATION = "New Location";
         final String DEFAULT_ANIMAL = "Unknown";
+        final String DEFAULT_STATUS = "No";
         final LocalDate DEFAULT_DATE = LocalDate.now();
 
-        Observation newObservation = new Observation(currentAccount, DEFAULT_LOCATION, DEFAULT_ANIMAL, DEFAULT_DATE);
+        Observation newObservation = new Observation(currentAccount, DEFAULT_LOCATION, DEFAULT_ANIMAL, DEFAULT_STATUS, DEFAULT_DATE);
         observationDAO.addObservation(newObservation);
         loadObservationsFromDao();
 

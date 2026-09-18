@@ -7,19 +7,24 @@ module GoannaWatch {
     requires javafx.controls;
     requires javafx.fxml;
     requires java.sql;
+    requires org.xerial.sqlitejdbc;
     requires org.apache.commons.validator;
     requires atlantafx.base;
-    requires org.apache.commons.logging;
+    requires password4j;
 
 
     opens GoannaWatch to javafx.fxml;
     exports GoannaWatch;
+
     exports GoannaWatch.account.controller;
     opens GoannaWatch.account.controller to javafx.fxml, org.junit.platform.commons;
+
     exports GoannaWatch.account.model;
     opens GoannaWatch.account.model to javafx.fxml, org.junit.platform.commons;
+
     exports GoannaWatch.observations.model;
     opens GoannaWatch.observations.model to javafx.fxml, org.junit.platform.commons;
+
     exports GoannaWatch.observations.controller;
     opens GoannaWatch.observations.controller to javafx.fxml, org.junit.platform.commons;
 }

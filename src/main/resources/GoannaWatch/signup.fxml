@@ -46,6 +46,8 @@
             <TextField id="userInput" fx:id="emailTextField" prefHeight="30" prefWidth="200" promptText="Enter your email address..." />
             <Label id="userInputLabel" text="Password" />
             <PasswordField id="userInput" fx:id="passwordField" prefHeight="30" prefWidth="200" promptText="Enter your password..." />
+            <Label id="userInputLabel" text="Confirm Password" />
+            <PasswordField id="userInput" fx:id="confirmPasswordField" prefHeight="30" prefWidth="200" promptText="Re-enter your password..." />
 
             <Label fx:id="signupFeedbackLabel"
                    text=""

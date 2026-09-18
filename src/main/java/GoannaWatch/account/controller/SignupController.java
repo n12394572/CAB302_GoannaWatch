@@ -1,11 +1,11 @@
 package GoannaWatch.account.controller;
 
 import GoannaWatch.App;
-import GoannaWatch.account.model.IAccountDAO;
-import GoannaWatch.account.model.MockAccountDAO;
 import GoannaWatch.account.model.Account;
-
+import GoannaWatch.account.model.IAccountDAO;
 import GoannaWatch.account.model.Session;
+import GoannaWatch.account.model.SqliteAccountDAO;
+
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
@@ -20,11 +20,7 @@ import java.util.InputMismatchException;
  */
 public class SignupController {
 
-    //TODO Add password confirmation and some sort of security for password
-    //TODO Bind button to enter key
-    //TODO Link Login page
     //TODO Functionality for Remember Me checkbox
-    //TODO change from Alert to a listener so that it doesn't interrupt user input
 
     private final IAccountDAO accountDAO;
 
@@ -33,6 +29,9 @@ public class SignupController {
 
     @FXML
     private PasswordField passwordField;
+
+    @FXML
+    private PasswordField confirmPasswordField;
 
     @FXML
     private Label signupFeedbackLabel;
@@ -59,7 +58,7 @@ public class SignupController {
      * Constructs a new SignupController with an AccountManager that  uses an in-memory database to perform CRUD operations on accounts.
      */
     public SignupController(){
-        this(new MockAccountDAO());
+        this(new SqliteAccountDAO());
     }
 
     // Package-private constructor allows test DAO for unit t esting without changing normal app behaviour.
@@ -100,8 +99,23 @@ public class SignupController {
 
         String firstName = firstNameTextField.getText();
         String lastName = lastNameTextField.getText();
-        String email = emailTextField.getText();
+
+        String email = emailTextField.getText() == null
+                ? ""
+                : emailTextField.getText().trim();
+
         String password = passwordField.getText();
+        String confirmPassword = confirmPasswordField.getText();
+
+        if (firstName == null || firstName.isBlank()
+                || lastName == null || lastName.isBlank()
+                || email.isBlank()
+                || password == null || password.isBlank()
+                || confirmPassword == null || confirmPassword.isBlank()) {
+
+            showSignupFeedback("Please fill in all fields.");
+            return;
+        }
 
         if (!Account.isPasswordValid(password)) {
             showSignupFeedback(
@@ -110,27 +124,50 @@ public class SignupController {
             return;
         }
 
-        if (isEmailAlreadyRegistered(email)){
-            showSignupFeedback("An account with that email already exists.");
+        if (!password.equals(confirmPassword)){
+            showSignupFeedback("Passwords do not match.");
             return;
         }
-        try {
-            Account newAccount = new Account(firstName, lastName, email, password);
-            accountDAO.addAccount(newAccount);
-            System.out.println("Account created for " + newAccount.getFullName());
 
-            Session.setCurrentAccount(newAccount);
+
+        try {
+            if (isEmailAlreadyRegistered(email)) {
+                showSignupFeedback(
+                        "An account with that email already exists."
+                );
+                return;
+            }
+
+            Account newAccount = new Account(firstName, lastName, email, password);
+
+            accountDAO.addAccount(newAccount);
+
+            Account savedAccount = accountDAO.getAccountByEmail(email);
+
+            if (savedAccount == null) {
+                showSignupFeedback(
+                        "Account saved, but could not be loaded. Please try logging in."
+                );
+                return;
+            }
+
+            Session.setCurrentAccount(savedAccount);
 
             Stage stage = (Stage) submitButton.getScene().getWindow();
-            FXMLLoader fxmlLoader = new FXMLLoader(App.class.getResource("landing.fxml"));
+            FXMLLoader fxmlLoader =
+                    new FXMLLoader(App.class.getResource("landing.fxml"));
             Scene scene = new Scene(fxmlLoader.load());
             stage.setScene(scene);
 
         } catch (InputMismatchException | IllegalArgumentException e) {
             showSignupFeedback(e.getMessage());
+
+        } catch (RuntimeException e) {
+            showSignupFeedback(
+                    "Could not access the database. Please try again."
+            );
+            System.err.println(e.getMessage());
         }
-
-
     }
 
     @FXML
@@ -149,9 +186,12 @@ public class SignupController {
      */
     // Package-private so duplicate email validation can be tested directly
     boolean isEmailAlreadyRegistered(String email) {
-        return accountDAO.getAllAccounts().stream()
-                .anyMatch(account -> account.getEmail().equalsIgnoreCase(email));
+        return accountDAO.getAccountByEmail(email) != null;
     }
 
+    @FXML
+    public void initialize() {
+        submitButton.setDefaultButton(true);
+    }
 }
 

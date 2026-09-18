@@ -6,12 +6,12 @@
 <?import javafx.scene.control.DatePicker?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.control.TextField?>
-
+<?import javafx.scene.control.RadioButton?>
+<?import javafx.scene.control.ToggleGroup?>
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.control.CheckBox?>
 <?import javafx.scene.layout.ColumnConstraints?>
-<?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.TableView?>
 
 <?import javafx.scene.control.TableColumn?>
@@ -26,7 +26,6 @@
         <VBox spacing="10.0">
             <CheckBox fx:id="showMineOnlyCheck" text = "Show only my observations" onAction="#onFilterChanged"/>
             <TextField fx:id="searchTextField" promptText="Search by animal or location..."/>
-            <ComboBox fx:id="sortComboBox" promptText="Sort by..." maxWidth="Infinity"/>
             <TableView fx:id="observationsTableView" VBox.vgrow="ALWAYS">
                 <columns>
                     <TableColumn fx:id="observerColumn" text="Observer" prefWidth="130.0"/>
@@ -48,10 +47,16 @@
                 </columnConstraints>
                 <Label text="Location: " GridPane.columnIndex="0" GridPane.rowIndex="0"/>
                 <Label text="Animal: " GridPane.columnIndex="0" GridPane.rowIndex="1"/>
-                <Label text="Date: " GridPane.columnIndex="0" GridPane.rowIndex="2"/>
+                <Label text="Endangered:" GridPane.columnIndex="0" GridPane.rowIndex="2"/>
+                <Label text="Date: " GridPane.columnIndex="0" GridPane.rowIndex="3"/>
                 <TextField fx:id="locationTextField" GridPane.columnIndex="1" GridPane.rowIndex="0"/>
                 <TextField fx:id="animalTextField" GridPane.columnIndex="1" GridPane.rowIndex="1"/>
-                <DatePicker fx:id="datePicker" GridPane.columnIndex="1" GridPane.rowIndex="2"/>
+                <fx:define>
+                    <ToggleGroup fx:id="isEndangered" GridPane.columnIndex="1" GridPane.rowIndex="2"/>
+                </fx:define>
+                <RadioButton text="Yes" toggleGroup="$isEndangered"/>
+                <RadioButton text="No" toggleGroup="$isEndangered"/>
+                <DatePicker fx:id="datePicker" GridPane.columnIndex="1" GridPane.rowIndex="3"/>
             </GridPane>
             <HBox spacing="10.0" alignment="CENTER">
                 <Button text="Confirm" onAction="#onEditConfirm"/>

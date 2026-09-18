@@ -3,18 +3,17 @@ package GoannaWatch.account.controller;
 import GoannaWatch.App;
 import GoannaWatch.account.model.IAccountDAO;
 import GoannaWatch.account.model.Account;
-import GoannaWatch.account.model.MockAccountDAO;
-
 import GoannaWatch.account.model.Session;
+import GoannaWatch.account.model.SqliteAccountDAO;
+
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.stage.Stage;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 
 import java.io.IOException;
+import java.sql.SQLException;
 import java.util.List;
 import java.util.Optional;
 
@@ -22,11 +21,8 @@ import java.util.Optional;
  * Initialises the controller class. This method is automatically called after the .fxml file has been loaded.
  */
 public class LoginController {
-    private static final Log log = LogFactory.getLog(LoginController.class);
     //TODO Bind button to enter key
     //TODO Link Signup Page
-    //TODO Change from Alert to something that doesn't create a new window.
-    // (Probably just a label or a Message using AtlantaFX)
 
     private final IAccountDAO accountDAO;
     private boolean rememberMe = false;
@@ -51,6 +47,7 @@ public class LoginController {
 
     @FXML
     private Button loginButton;
+
     @FXML
     private Button cancelButton;
 
@@ -58,7 +55,7 @@ public class LoginController {
      * Constructs a new LoginController with an AccountManager that uses an in-memory database to perform CRUD operations on accounts.
      */
     public LoginController() {
-        accountDAO = new MockAccountDAO();
+        accountDAO = new  SqliteAccountDAO();
     }
 
     // Package-private constructor allows a test DAO for unit testing without changing normal app behaviour
@@ -106,27 +103,48 @@ public class LoginController {
         loginFeedbackLabel.setVisible(false);
         loginFeedbackLabel.setManaged(false);
 
-        String email = emailTextField.getText() == null ? "" : emailTextField.getText().trim();
-        String password = passwordField.getText() == null ? "" : passwordField.getText().trim();
+        String email = emailTextField.getText() == null
+                ? ""
+                : emailTextField.getText().trim();
+        String password = passwordField.getText() == null
+                ? ""
+                : passwordField.getText();
 
         if (email.isBlank() || password.isBlank()) {
             showLoginFeedback("Please enter both email and password.");
             return;
         }
 
-        Optional<Account> matchedAccount = findAccountByEmail(email);
+        try {
+            Account account = accountDAO.getAccountByEmail(email);
 
-        if (matchedAccount.isEmpty() || !matchedAccount.get().getPassword().equals(password)){
-            showLoginFeedback("Incorrect email or password.");
-            return;
-        }
+            boolean passwordMatches;
 
-        Session.setCurrentAccount(matchedAccount.get());
+            if (accountDAO instanceof SqliteAccountDAO sqliteAccountDAO) {
+                passwordMatches = sqliteAccountDAO.checkPassword(email, password);
+            } else {
+                passwordMatches = account != null
+                        && account.getPassword() != null
+                        && account.getPassword().equals(password);
+            }
+
+            if (account == null || !passwordMatches) {
+                showLoginFeedback("Incorrect email or password.");
+                return;
+            }
+
+        Session.setCurrentAccount(account);
 
         Stage stage = (Stage) loginButton.getScene().getWindow();
         FXMLLoader fxmlLoader = new FXMLLoader(App.class.getResource("landing.fxml"));
         Scene scene = new Scene(fxmlLoader.load());
         stage.setScene(scene);
+    }
+
+        } catch (SQLException e) {
+            showLoginFeedback("Could not access the database. Please try again.");
+            System.err.println(e.getMessage());
+        }
     }
 
     /**
@@ -151,5 +169,9 @@ public class LoginController {
         stage.setScene(scene);
     }
 
+    @FXML
+    public void initialize() {
+        loginButton.setDefaultButton(true);
+    }
 }
 
