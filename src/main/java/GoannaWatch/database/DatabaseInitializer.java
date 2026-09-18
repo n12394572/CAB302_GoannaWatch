@@ -28,6 +28,7 @@ public class DatabaseInitializer {
                 observer_id INTEGER NOT NULL,
                 location TEXT NOT NULL,
                 animal_seen TEXT NOT NULL,
+                is_endangered TEXT NOT NULL,
                 observed_at TEXT NOT NULL,
                 FOREIGN KEY (observer_id) REFERENCES accounts(id)
             )

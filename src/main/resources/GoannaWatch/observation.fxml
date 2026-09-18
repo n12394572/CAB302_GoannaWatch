@@ -6,7 +6,8 @@
 <?import javafx.scene.control.DatePicker?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.control.TextField?>
-
+<?import javafx.scene.control.RadioButton?>
+<?import javafx.scene.control.ToggleGroup?>
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.control.CheckBox?>
@@ -48,10 +49,16 @@
                 </columnConstraints>
                 <Label text="Location: " GridPane.columnIndex="0" GridPane.rowIndex="0"/>
                 <Label text="Animal: " GridPane.columnIndex="0" GridPane.rowIndex="1"/>
-                <Label text="Date: " GridPane.columnIndex="0" GridPane.rowIndex="2"/>
+                <Label text="Endangered:" GridPane.columnIndex="0" GridPane.rowIndex="2"/>
+                <Label text="Date: " GridPane.columnIndex="0" GridPane.rowIndex="3"/>
                 <TextField fx:id="locationTextField" GridPane.columnIndex="1" GridPane.rowIndex="0"/>
                 <TextField fx:id="animalTextField" GridPane.columnIndex="1" GridPane.rowIndex="1"/>
-                <DatePicker fx:id="datePicker" GridPane.columnIndex="1" GridPane.rowIndex="2"/>
+                <fx:define>
+                    <ToggleGroup fx:id="isEndangered" GridPane.columnIndex="1" GridPane.rowIndex="2"/>
+                </fx:define>
+                <RadioButton text="Yes" toggleGroup="$isEndangered"/>
+                <RadioButton text="No" toggleGroup="$isEndangered"/>
+                <DatePicker fx:id="datePicker" GridPane.columnIndex="1" GridPane.rowIndex="3"/>
             </GridPane>
             <HBox spacing="10.0" alignment="CENTER">
                 <Button text="Confirm" onAction="#onEditConfirm"/>

@@ -55,6 +55,9 @@ public class ObservationController {
     private TextField animalTextField;
 
     @FXML
+    private RadioButton endangerRadio;
+
+    @FXML
     private DatePicker datePicker;
 
     @FXML
@@ -94,6 +97,7 @@ public class ObservationController {
         observationContainer.setVisible(true);
         locationTextField.setText(observation.getLocation());
         animalTextField.setText(observation.getAnimalSeen());
+        endangerRadio.setText(observation.getIsEndangered());
         datePicker.setValue(observation.getObservedAt());
     }
 
@@ -108,6 +112,8 @@ public class ObservationController {
                 new SimpleStringProperty(cellData.getValue().getLocation()));
         animalColumn.setCellValueFactory(cellData ->
                 new SimpleStringProperty(cellData.getValue().getAnimalSeen()));
+        endangerColumn.setCellValueFactory(cellData ->
+                new SimpleStringProperty(cellData.getValue().getIsEndangered()));
         dateColumn.setCellValueFactory(cellData ->
                 new SimpleStringProperty(cellData.getValue().getObservedAt().toString()));
 
@@ -204,7 +210,9 @@ public class ObservationController {
         try {
             selected.setLocation(locationTextField.getText());
             selected.setAnimalSeen(animalTextField.getText());
+            selected.setIsEndangered(endangerRadio.getText());
             selected.setObservedAt(datePicker.getValue());
+
             observationDAO.updateObservation(selected);
             loadObservationsFromDao();
         } catch (InputMismatchException e) {
@@ -237,9 +245,10 @@ public class ObservationController {
 
         final String DEFAULT_LOCATION = "New Location";
         final String DEFAULT_ANIMAL = "Unknown";
+        final String DEFAULT_STATUS = "No";
         final LocalDate DEFAULT_DATE = LocalDate.now();
 
-        Observation newObservation = new Observation(currentAccount, DEFAULT_LOCATION, DEFAULT_ANIMAL, DEFAULT_DATE);
+        Observation newObservation = new Observation(currentAccount, DEFAULT_LOCATION, DEFAULT_ANIMAL, DEFAULT_STATUS, DEFAULT_DATE);
         observationDAO.addObservation(newObservation);
         loadObservationsFromDao();
 

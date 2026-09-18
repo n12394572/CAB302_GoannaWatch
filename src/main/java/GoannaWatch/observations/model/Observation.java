@@ -11,6 +11,7 @@ public class Observation {
     private Account observer;
     private String location;
     private String animalSeen;
+    private String isEndangered;
     private LocalDate observedAt;
 
 
@@ -20,12 +21,14 @@ public class Observation {
      * @param observer   The account recording the observation.
      * @param location   The location of the observation.
      * @param animalSeen The animal observed.
+     * @param isEndangered The endangerment status of the animal observed.
      * @param observedAt The date of the observation.
      */
-    public Observation(Account observer, String location, String animalSeen, LocalDate observedAt) {
+    public Observation(Account observer, String location, String animalSeen, String isEndangered, LocalDate observedAt) {
         setObserver(observer);
         setLocation(location);
         setAnimalSeen(animalSeen);
+        setIsEndangered(isEndangered);
         setObservedAt(observedAt);
     }
 
@@ -108,6 +111,27 @@ public class Observation {
             throw new InputMismatchException("Animal cannot be blank.");
         }
         this.animalSeen = animalSeen;
+    }
+
+    /**
+     * Returns the animal endangerment status observed.
+     *
+     * @return The animal endangerment status observed.
+     */
+    public String getIsEndangered() {
+        return isEndangered;
+    }
+
+    /**
+     * Sets the animal endangerment status observed.
+     *
+     * @param isEndangered The animal endangerment status to be set.
+     */
+    public void setIsEndangered(String isEndangered) {
+        if (isEndangered == null || isEndangered.isBlank()) {
+            throw new InputMismatchException("Animal cannot be blank.");
+        }
+        this.isEndangered = isEndangered;
     }
 
     /**

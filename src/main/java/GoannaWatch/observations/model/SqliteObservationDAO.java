@@ -28,8 +28,8 @@ public class SqliteObservationDAO {
     public void addObservation(Observation observation) throws SQLException {
         String sql = """
                 INSERT INTO observations
-                (observer_id, location, animal_seen, observed_at)
-                VALUES (?, ?, ?, ?)
+                (observer_id, location, animal_seen, is_endangered, observed_at)
+                VALUES (?, ?, ?, ?, ?)
                 """;
 
         try (Connection connection = DatabaseConnection.getConnection();
@@ -39,7 +39,8 @@ public class SqliteObservationDAO {
             statement.setInt(1, observation.getObserver().getId());
             statement.setString(2, observation.getLocation());
             statement.setString(3, observation.getAnimalSeen());
-            statement.setString(4, observation.getObservedAt().toString());
+            statement.setString(4, observation.getIsEndangered());
+            statement.setString(5, observation.getObservedAt().toString());
 
             statement.executeUpdate();
 
@@ -79,6 +80,7 @@ public class SqliteObservationDAO {
                             observer,
                             result.getString("location"),
                             result.getString("animal_seen"),
+                            result.getString("is_endangered"),
                             LocalDate.parse(result.getString("observed_at"))
                     );
 
@@ -112,6 +114,7 @@ public class SqliteObservationDAO {
                                 + observation.getObserver().getFullName() + " | "
                                 + observation.getLocation() + " | "
                                 + observation.getAnimalSeen() + " | "
+                                + observation.getIsEndangered() + " | "
                                 + observation.getObservedAt()
                 );
             }
@@ -145,6 +148,7 @@ public class SqliteObservationDAO {
                         observer,
                         result.getString("location"),
                         result.getString("animal_seen"),
+                        result.getString("is_endangered"),
                         LocalDate.parse(result.getString("observed_at"))
                 );
 
