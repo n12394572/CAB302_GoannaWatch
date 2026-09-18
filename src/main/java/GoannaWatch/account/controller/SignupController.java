@@ -35,6 +35,9 @@ public class SignupController {
     private PasswordField passwordField;
 
     @FXML
+    private PasswordField confirmPasswordField;
+
+    @FXML
     private TextField firstNameTextField;
 
     @FXML
@@ -81,10 +84,16 @@ public class SignupController {
         String lastName = lastNameTextField.getText();
         String email = emailTextField.getText().trim();
         String password = passwordField.getText();
+        String confirmPassword = confirmPasswordField.getText();
 
         try {
             if (isEmailAlreadyRegistered(email)) {
                 showAlert("An account with that email already exists.");
+                return;
+            }
+
+            if (!password.equals(confirmPassword)){
+                showAlert("Passwords do not match.");
                 return;
             }
 
