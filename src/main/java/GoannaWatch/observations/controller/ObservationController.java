@@ -2,6 +2,7 @@ package GoannaWatch.observations.controller;
 
 import GoannaWatch.App;
 import GoannaWatch.account.model.*;
+import GoannaWatch.observations.model.SqliteObservationDAO;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -28,7 +29,7 @@ import java.util.List;
  */
 public class ObservationController {
 
-    private final IObservationDAO observationDAO;
+    private final SqliteObservationDAO observationDAO;
 
     @FXML
     private TableView<Observation> observationsTableView;
@@ -63,9 +64,6 @@ public class ObservationController {
     @FXML
     private TextField searchTextField;
 
-    @FXML
-    private ComboBox<String> sortComboBox;
-
     private final ObservableList<Observation> masterObservations = FXCollections.observableArrayList();
 
     private FilteredList<Observation> filteredObservations;
@@ -78,7 +76,7 @@ public class ObservationController {
 
     //TODO Create Notification popups using AtlantaFX for edit, delete, and Add, for action confirmation.
     public ObservationController() {
-        observationDAO = new MockObservationDAO();
+        observationDAO = new SqliteObservationDAO();
     }
 
     /**
@@ -113,12 +111,11 @@ public class ObservationController {
 
         filteredObservations = new FilteredList<>(masterObservations, o -> true);
         sortedObservations = new SortedList<>(filteredObservations);
+        sortedObservations.comparatorProperty().bind(observationsTableView.comparatorProperty());
         observationsTableView.setItems(sortedObservations);
 
-        sortComboBox.setItems(FXCollections.observableArrayList(
-                "Date (Newest first)", "Date (Oldest first)", "Animal", "Location"));
-        sortComboBox.getSelectionModel().selectFirst();
-        sortComboBox.setOnAction(e -> applySort());
+        dateColumn.setSortType(TableColumn.SortType.DESCENDING);
+        observationsTableView.getSortOrder().add(dateColumn);
 
         searchTextField.textProperty().addListener((obs, oldVal, newVal) -> applyFilter());
 
@@ -126,7 +123,7 @@ public class ObservationController {
                 (obs, oldSelection, newSelection) -> selectObservation(newSelection));
 
         loadObservationsFromDao();
-        applySort();
+
 
         observationsTableView.getSelectionModel().selectFirst();
     }
@@ -171,25 +168,6 @@ public class ObservationController {
                     o.getAnimalSeen().toLowerCase().contains(lowerQuery)
             || o.getLocation().toLowerCase().contains(lowerQuery));
         }
-    }
-
-    /**
-     * Sorts observations based on current selection in sortComboBox. Defaults to the newest observation.
-     * //FIXME Change to sorting by column headers? Maybe more intuitive and means we can make space on screen.
-     */
-    private void applySort() {
-        String selected = sortComboBox.getValue();
-        if (selected == null) {
-            return;
-        }
-        Comparator<Observation> comparator = switch (selected) {
-            case "Date (Newest first)" -> Comparator.comparing(Observation::getObservedAt).reversed();
-            case "Date (Oldest first)" -> Comparator.comparing(Observation::getObservedAt);
-            case "Animal" -> Comparator.comparing(Observation::getAnimalSeen, String.CASE_INSENSITIVE_ORDER);
-            case "Location" -> Comparator.comparing(Observation::getLocation, String.CASE_INSENSITIVE_ORDER);
-            default -> Comparator.comparing(Observation::getObservedAt).reversed();
-        };
-        sortedObservations.setComparator(comparator);
     }
 
     /**

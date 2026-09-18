@@ -11,7 +11,6 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.control.CheckBox?>
 <?import javafx.scene.layout.ColumnConstraints?>
-<?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.TableView?>
 
 <?import javafx.scene.control.TableColumn?>
@@ -26,7 +25,6 @@
         <VBox spacing="10.0">
             <CheckBox fx:id="showMineOnlyCheck" text = "Show only my observations" onAction="#onFilterChanged"/>
             <TextField fx:id="searchTextField" promptText="Search by animal or location..."/>
-            <ComboBox fx:id="sortComboBox" promptText="Sort by..." maxWidth="Infinity"/>
             <TableView fx:id="observationsTableView" VBox.vgrow="ALWAYS">
                 <columns>
                     <TableColumn fx:id="observerColumn" text="Observer" prefWidth="130.0"/>
