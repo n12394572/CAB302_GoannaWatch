@@ -7,11 +7,14 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
-public class SqliteAccountDAO {
+public class SqliteAccountDAO implements IAccountDAO{
 
     // Saves an account to the database.
-    public void addAccount(Account account) throws SQLException {
+    @Override
+    public void addAccount(Account account) {
         String sql = "INSERT INTO accounts "
                 + "(first_name, last_name, email, password) "
                 + "VALUES (?, ?, ?, ?)";
@@ -27,12 +30,79 @@ public class SqliteAccountDAO {
             statement.setString(4, hash);
 
             statement.executeUpdate();
+        } catch (SQLException e) {
+            throw new RuntimeException("Failed to add account: " + e.getMessage());
         }
+    }
+
+    @Override
+    public void updateAccount(Account account) {
+        String sql = """
+                UPDATE accounts
+                SET first_name = ?, last_name = ?, email = ?, password = ?
+                WHERE id = ?
+                """;
+
+        try (Connection connection = DatabaseConnection.getConnection();
+             PreparedStatement statement = connection.prepareStatement(sql)){
+
+            statement.setString(1, account.getFirstName());
+            statement.setString(2, account.getLastName());
+            statement.setString(3, account.getEmail());
+
+            String hash = PasswordUtils.hashPassword(account.getPassword());
+            statement.setString(4, hash);
+
+            statement.setInt(5, account.getId());
+
+            statement.executeUpdate();
+        } catch (SQLException e) {
+            throw new RuntimeException("Failed to update account: " + e.getMessage());
+        }
+    }
+
+    @Override
+    public void deleteAccount(Account account) {
+        String sql = "DELETE FROM accounts WHERE id = ?";
+
+        try (Connection connection = DatabaseConnection.getConnection();
+             PreparedStatement statement = connection.prepareStatement(sql)) {
+            statement.setInt(1, account.getId());
+            statement.executeUpdate();
+        } catch (SQLException e) {
+            throw new RuntimeException("Failed to delete account: " + e.getMessage());
+        }
+    }
+
+    @Override
+    public List<Account> getAllAccounts() {
+        List<Account> accounts = new ArrayList<>();
+        String sql = "SELECT * FROM accounts";
+
+        try (Connection connection = DatabaseConnection.getConnection();
+        PreparedStatement statement = connection.prepareStatement(sql);
+        ResultSet result = statement.executeQuery()) {
+            while (result.next()) {
+                Account account = new Account(
+                        result.getString("first_name"),
+                        result.getString("last_name"),
+                        result.getString("email"),
+                        null
+                );
+                account.setId(result.getInt("id"));
+                accounts.add(account);
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException("Failed to get all accounts: " + e.getMessage(), e);
+        }
+
+        return accounts;
     }
 
 
     // Finds an account by email.
-    public Account getAccountByEmail(String email) throws SQLException {
+    @Override
+    public Account getAccountByEmail(String email) {
         String sql = "SELECT * FROM accounts WHERE email = ?";
 
         try (Connection connection = DatabaseConnection.getConnection();
@@ -54,6 +124,9 @@ public class SqliteAccountDAO {
                     return account;
                 }
             }
+
+        }catch (SQLException e) {
+            throw new RuntimeException("Failed to get account by email: " + e.getMessage());
         }
 
         return null;
@@ -92,6 +165,7 @@ public class SqliteAccountDAO {
      * @return true if the account exists and the password matches
      * @throws SQLException if the database query fails
      */
+
     public boolean checkPassword(String email, String password)
             throws SQLException {
 
