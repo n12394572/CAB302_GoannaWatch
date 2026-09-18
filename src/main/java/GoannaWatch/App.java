@@ -16,6 +16,8 @@ import java.io.IOException;
  */
 public class App extends Application {
 
+    private static boolean darkMode = true;
+
     @Override
     public void start(Stage stage) throws IOException {
         Application.setUserAgentStylesheet(new PrimerDark().getUserAgentStylesheet());
@@ -25,6 +27,32 @@ public class App extends Application {
         stage.setTitle("GoannaWatch");
         stage.setScene(scene);
         stage.show();
+    }
+
+    /**
+     * Switches the application between dark mode and light mode.
+     */
+
+    public static void toggleTheme() {
+        darkMode = !darkMode;
+
+        if (darkMode) {
+            Application.setUserAgentStylesheet(
+                    new PrimerDark().getUserAgentStylesheet()
+            );
+        } else {
+            Application.setUserAgentStylesheet(
+                    new PrimerLight().getUserAgentStylesheet()
+            );
+        }
+    }
+
+    /**
+     * Returns whether the application is currently using dark mode.
+     * @return true if dark mode is active, otherwise false.
+     */
+    public static boolean isDarkMode() {
+        return darkMode;
     }
 
     /**

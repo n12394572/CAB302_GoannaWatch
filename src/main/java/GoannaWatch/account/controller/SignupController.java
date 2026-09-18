@@ -35,6 +35,9 @@ public class SignupController {
     private PasswordField passwordField;
 
     @FXML
+    private Label signupFeedbackLabel;
+
+    @FXML
     private TextField firstNameTextField;
 
     @FXML
@@ -56,7 +59,22 @@ public class SignupController {
      * Constructs a new SignupController with an AccountManager that  uses an in-memory database to perform CRUD operations on accounts.
      */
     public SignupController(){
-        accountDAO = new MockAccountDAO();
+        this(new MockAccountDAO());
+    }
+
+    // Package-private constructor allows test DAO for unit t esting without changing normal app behaviour.
+    SignupController(IAccountDAO accountDAO) {
+        this.accountDAO = accountDAO;
+    }
+
+    /**
+     * Displays an inline validation warning on the signup page.
+     * @param message The validation message to display
+     */
+    private void showSignupFeedback(String message) {
+        signupFeedbackLabel.setText(message);
+        signupFeedbackLabel.setVisible(true);
+        signupFeedbackLabel.setManaged(true);
     }
 
     /**
@@ -77,13 +95,23 @@ public class SignupController {
      */
     @FXML
     private void onSubmitButtonClick() throws IOException {
+        signupFeedbackLabel.setVisible(false);
+        signupFeedbackLabel.setManaged(false);
+
         String firstName = firstNameTextField.getText();
         String lastName = lastNameTextField.getText();
         String email = emailTextField.getText();
         String password = passwordField.getText();
 
+        if (!Account.isPasswordValid(password)) {
+            showSignupFeedback(
+                    "Password must contain at least 8 characters, an uppercase letter, a number and a special character."
+            );
+            return;
+        }
+
         if (isEmailAlreadyRegistered(email)){
-            showAlert("An account with that email already exists.");
+            showSignupFeedback("An account with that email already exists.");
             return;
         }
         try {
@@ -99,7 +127,7 @@ public class SignupController {
             stage.setScene(scene);
 
         } catch (InputMismatchException | IllegalArgumentException e) {
-            showAlert(e.getMessage());
+            showSignupFeedback(e.getMessage());
         }
 
 
@@ -119,20 +147,11 @@ public class SignupController {
      * @param email The email to check if it is already registered.
      * @return The account linked to the email if it already exists, else false.
      */
-    private boolean isEmailAlreadyRegistered(String email) {
+    // Package-private so duplicate email validation can be tested directly
+    boolean isEmailAlreadyRegistered(String email) {
         return accountDAO.getAllAccounts().stream()
                 .anyMatch(account -> account.getEmail().equalsIgnoreCase(email));
     }
 
-    /**
-     * Displays an alert dialog box to the user.
-     * @param message The text shown in the body of the alert.
-     */
-    private void showAlert(String message) {
-        Alert alert = new Alert(Alert.AlertType.WARNING);
-        alert.setHeaderText(null);
-        alert.setContentText(message);
-        alert.showAndWait();
-    }
 }
 

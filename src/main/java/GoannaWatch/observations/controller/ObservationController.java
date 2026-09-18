@@ -157,20 +157,29 @@ public class ObservationController {
         applyFilter();
     }
 
+    //Checks whether an observation matches the supplied search query by animal name or location.
+    //Package-private so the filtering behaviour can be unit tested without requiring JavaFX controls to be initialised.
+    boolean matchesSearch(Observation observation, String query) {
+        if (query == null || query.isBlank()) {
+            return true;
+        }
+
+        String lowerQuery = query.toLowerCase();
+
+        return observation.getAnimalSeen().toLowerCase().contains(lowerQuery) ||
+                observation.getLocation().toLowerCase().contains(lowerQuery);
+    }
+
     /**
      * Filters objects based on searchTextField for animal or location.
      * // TODO Extend so that filters Account and Date as well.
      */
     private void applyFilter() {
         String query = searchTextField.getText();
-        if (query == null || query.isBlank()) {
-            filteredObservations.setPredicate(o -> true);
-        } else {
-            String lowerQuery = query.toLowerCase();
-            filteredObservations.setPredicate(o ->
-                    o.getAnimalSeen().toLowerCase().contains(lowerQuery)
-            || o.getLocation().toLowerCase().contains(lowerQuery));
-        }
+
+        filteredObservations.setPredicate(
+                observation -> matchesSearch(observation, query)
+        );
     }
 
     /**

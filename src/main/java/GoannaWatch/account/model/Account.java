@@ -32,11 +32,7 @@ public class Account {
         setEmail(email);
         setFirstName(firstName);
         setLastName(lastName);
-        if (password != null && !password.isBlank()){
-            setPassword(password);
-        } else {
-            this.password = password;
-        }
+        setPassword(password);
     }
 
     /**
@@ -68,7 +64,7 @@ public class Account {
      * @param firstName The first name to set.
      */
     public void setFirstName(String firstName) {
-        if (firstName.isBlank() || firstName==null){
+        if (firstName == null || firstName.isBlank()){
             throw new InputMismatchException("First name cannot be blank.");
         }
         this.firstName = capitaliseName(firstName);
@@ -96,7 +92,7 @@ public class Account {
      * @param lastName The last name to set.
      */
     public void setLastName(String lastName) {
-        if (lastName.isBlank() || lastName==null){
+        if (lastName == null || lastName.isBlank()){
             throw new InputMismatchException("Last name cannot be blank.");
         }
         this.lastName = capitaliseName(lastName);
@@ -131,15 +127,26 @@ public class Account {
     }
 
     /**
+     * Checks whether a password meets the required security requirements.
+     *
+     * @param password The password to validate.
+     * @return true if the password meets all requirements, otherwise false.
+     */
+    public static boolean isPasswordValid(String password) {
+        return password != null && !password.isBlank() && PASSWORD_PATTERN.matcher(password).matches();
+    }
+
+    /**
      * Sets the password of the account.
      * @param password The password of the account. Must include at least 8 characters, an uppercase and lowercase character, a number, and a special character.
      */
     public void setPassword(String password) {
-        if (password.isBlank() || !PASSWORD_PATTERN.matcher(password).matches()){
+        if (!isPasswordValid(password)) {
             throw new IllegalArgumentException(
                     "Password must be at least 8 characters and include an uppercase letter, a number, and a special character."
             );
         }
+
         this.password = password;
     }
 

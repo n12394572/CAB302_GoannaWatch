@@ -11,6 +11,8 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.stage.Stage;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
 import java.io.IOException;
 import java.util.List;
@@ -20,6 +22,7 @@ import java.util.Optional;
  * Initialises the controller class. This method is automatically called after the .fxml file has been loaded.
  */
 public class LoginController {
+    private static final Log log = LogFactory.getLog(LoginController.class);
     //TODO Bind button to enter key
     //TODO Link Signup Page
     //TODO Change from Alert to something that doesn't create a new window.
@@ -33,6 +36,9 @@ public class LoginController {
 
     @FXML
     private PasswordField passwordField;
+
+    @FXML
+    private Label loginFeedbackLabel;
 
     @FXML
     private CheckBox rememberMeCheck;
@@ -53,6 +59,21 @@ public class LoginController {
      */
     public LoginController() {
         accountDAO = new MockAccountDAO();
+    }
+
+    // Package-private constructor allows a test DAO for unit testing without changing normal app behaviour
+    LoginController(IAccountDAO accountDAO) {
+        this.accountDAO = accountDAO;
+    }
+
+    /**
+     * Displays an inline validation warning on the login page
+     * @param message The validation message to display
+     */
+    private void showLoginFeedback(String message) {
+        loginFeedbackLabel.setText(message);
+        loginFeedbackLabel.setVisible(true);
+        loginFeedbackLabel.setManaged(true);
     }
 
     /**
@@ -82,17 +103,21 @@ public class LoginController {
      */
     @FXML
     private void onNextButtonClick() throws IOException {
+        loginFeedbackLabel.setVisible(false);
+        loginFeedbackLabel.setManaged(false);
+
         String email = emailTextField.getText() == null ? "" : emailTextField.getText().trim();
         String password = passwordField.getText() == null ? "" : passwordField.getText().trim();
 
         if (email.isBlank() || password.isBlank()) {
-            showAlert(Alert.AlertType.WARNING, "Missing information", "Please enter both email or password.");
+            showLoginFeedback("Please enter both email and password.");
+            return;
         }
 
         Optional<Account> matchedAccount = findAccountByEmail(email);
 
         if (matchedAccount.isEmpty() || !matchedAccount.get().getPassword().equals(password)){
-            showAlert(Alert.AlertType.ERROR, "Login failed", "Incorrect email or password.");
+            showLoginFeedback("Incorrect email or password.");
             return;
         }
 
@@ -109,7 +134,8 @@ public class LoginController {
      * @param email The email address to search for
      * @return An {@link Optional} containing the matching {@link Account} if one exists.
      */
-    private Optional<Account> findAccountByEmail(String email) {
+    //Package-private for account lookup to be uni tested without JavaFX controls to be initialised.
+    Optional<Account> findAccountByEmail(String email) {
         List<Account> accounts = accountDAO.getAllAccounts();
         return accounts.stream()
                 .filter(a -> a.getEmail().equalsIgnoreCase(email))
@@ -125,20 +151,5 @@ public class LoginController {
         stage.setScene(scene);
     }
 
-    /**
-     * Displays an alert dialog box to the user.
-     * @param type The category of alert to display.
-     * @param title The text shown in the alert window's title bar.
-     * @param message The text shown in the body of the alert.
-     *
-     * //TODO Change from Alert to a listener.
-     */
-    private void showAlert(Alert.AlertType type, String title, String message) {
-        Alert alert = new Alert(type);
-        alert.setTitle(title);
-        alert.setHeaderText(null);
-        alert.setContentText(message);
-        alert.showAndWait();
-    }
 }
 

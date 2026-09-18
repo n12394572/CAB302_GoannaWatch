@@ -8,6 +8,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.Hyperlink;
 import javafx.stage.Stage;
 
 import java.io.IOException;
@@ -24,7 +25,7 @@ public class LandingController {
     private Label emailLabel;
 
     @FXML
-    private Button logoutButton;
+    private Hyperlink logoutButton;
 
     @FXML
     private Button newObservationButton;
@@ -38,16 +39,42 @@ public class LandingController {
     @FXML
     private Button dashboardButton;
 
+    @FXML
+    private Hyperlink themeButton;
+
     /**
      * Initialises the controller class. This method is automatically called after the fxml file has been loaded.
      */
     @FXML
     public void initialize(){
         Account current = Session.getCurrentAccount();
+
         if (current != null) {
             welcomeLabel.setText("Welcome, " + current.getFullName() + "!");
             emailLabel.setText(current.getEmail());
         }
+
+        updateThemeButtonText();
+    }
+
+    /**
+     * Updates the theme button text to show the theme the user can switch to
+     */
+    private void updateThemeButtonText() {
+        if (App.isDarkMode()) {
+            themeButton.setText("Light Mode");
+        } else {
+            themeButton.setText("Dark Mode");
+        }
+    }
+
+    /**
+     * Switches the application between dark mode and light mode
+     */
+    @FXML
+    private void onThemeButtonClick() {
+        App.toggleTheme();
+        updateThemeButtonText();
     }
 
     /**

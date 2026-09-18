@@ -23,7 +23,19 @@
                     <Font name="System Bold" size="12.0" />
                 </font>
             </Label>
-            <Label text="Profile | Log out" />
+
+            <HBox alignment="CENTER_RIGHT" spacing="5">
+                <Hyperlink fx:id="themeButton"
+                        text="Light Mode"
+                        onAction="#onThemeButtonClick" />
+
+                <Label text="| Profile |" />
+
+                <Hyperlink fx:id="logoutButton"
+                           text="Log out"
+                           onAction="#onLogoutButtonClick" />
+            </HBox>
+
         </VBox>
     </HBox>
     <ButtonBar id="pageContent" nodeOrientation="RIGHT_TO_LEFT">

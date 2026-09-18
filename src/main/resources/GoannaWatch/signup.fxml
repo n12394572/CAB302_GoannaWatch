@@ -46,6 +46,15 @@
             <TextField id="userInput" fx:id="emailTextField" prefHeight="30" prefWidth="200" promptText="Enter your email address..." />
             <Label id="userInputLabel" text="Password" />
             <PasswordField id="userInput" fx:id="passwordField" prefHeight="30" prefWidth="200" promptText="Enter your password..." />
+
+            <Label fx:id="signupFeedbackLabel"
+                   text=""
+                   wrapText="true"
+                   maxWidth="Infinity"
+                   visible="false"
+                   managed="false"
+                   style="-fx-background-color: rgba(180, 50, 50, 0.15); -fx-padding: 8; -fx-background-radius: 4;" />
+
             <!-- Uncomment when ready to add extra account types
             <Label id="userInputLabel" text="User type" />
             <ChoiceBox id="userInput" fx:id="userType" onShowing="#userTypeChoice" />
