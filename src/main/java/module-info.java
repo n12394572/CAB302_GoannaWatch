@@ -16,6 +16,8 @@ module GoannaWatch {
     opens GoannaWatch to javafx.fxml;
     exports GoannaWatch;
 
+    opens GoannaWatch.database to org.junit.platform.commons;
+
     exports GoannaWatch.account.controller;
     opens GoannaWatch.account.controller to javafx.fxml, org.junit.platform.commons;
 

@@ -1,4 +1,4 @@
-package GoannaWatch.tests;
+package GoannaWatch.account.model;
 
 import GoannaWatch.database.DatabaseInitializer;
 import org.junit.jupiter.api.Test;

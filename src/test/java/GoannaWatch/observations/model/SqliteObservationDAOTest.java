@@ -1,4 +1,4 @@
-package GoannaWatch.tests;
+package GoannaWatch.observations.model;
 
 import GoannaWatch.account.model.Account;
 import GoannaWatch.account.model.SqliteAccountDAO;
